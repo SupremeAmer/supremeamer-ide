@@ -24,13 +24,22 @@
             --html: #e34c26;
             --css: #264de4;
             --js: #f0db4f;
+            --python: #3776ab;
+            --php: #777bb4;
+            --java: #007396;
+            --ruby: #cc342d;
+            --csharp: #239120;
+            --cpp: #00599c;
+            --swift: #fa7343;
+            --go: #00add8;
+            --rust: #000000;
         }
         
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #333;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         
         .container {
@@ -42,41 +51,45 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 95vh;
+            height: 98vh;
         }
         
         header {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            gap: 10px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .logo i {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
         }
         
         .logo h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
+            white-space: nowrap;
         }
         
         .controls {
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         button {
-            padding: 8px 16px;
+            padding: 8px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -84,8 +97,8 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 6px;
+            font-size: 0.85rem;
         }
         
         .run-btn {
@@ -95,7 +108,6 @@
         
         .run-btn:hover {
             background-color: #009d7a;
-            transform: translateY(-2px);
         }
         
         .save-btn {
@@ -105,7 +117,6 @@
         
         .save-btn:hover {
             background-color: #5649c9;
-            transform: translateY(-2px);
         }
         
         .reset-btn {
@@ -115,7 +126,6 @@
         
         .reset-btn:hover {
             background-color: #d15b3f;
-            transform: translateY(-2px);
         }
         
         .export-btn {
@@ -125,13 +135,19 @@
         
         .export-btn:hover {
             background-color: #1e2223;
-            transform: translateY(-2px);
         }
         
         .editor-container {
             display: flex;
             flex: 1;
             overflow: hidden;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 992px) {
+            .editor-container {
+                flex-direction: row;
+            }
         }
         
         .code-editors {
@@ -145,16 +161,20 @@
             display: flex;
             background-color: var(--light);
             border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .editor-tab {
-            padding: 10px 20px;
+            padding: 10px 15px;
             cursor: pointer;
             font-weight: 600;
             border-right: 1px solid #ddd;
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap;
+            font-size: 0.9rem;
         }
         
         .editor-tab.active {
@@ -176,26 +196,29 @@
         }
         
         .editor-header {
-            padding: 10px 15px;
+            padding: 10px 12px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #ddd;
             font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .editor-header span {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 0.95rem;
         }
         
         .code-area {
             flex: 1;
-            padding: 15px;
-            font-family: 'Fira Code', 'Courier New', Courier, monospace;
-            font-size: 15px;
+            padding: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
             resize: none;
             border: none;
             outline: none;
@@ -209,27 +232,36 @@
             flex: 2;
             display: flex;
             flex-direction: column;
-            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
             overflow: hidden;
         }
         
+        @media (min-width: 992px) {
+            .preview {
+                border-top: none;
+                border-left: 1px solid #ddd;
+            }
+        }
+        
         .preview-header {
-            padding: 10px 15px;
+            padding: 10px 12px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #ddd;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         
         .preview-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .preview-controls button {
-            padding: 5px 10px;
+            padding: 5px 8px;
             font-size: 0.8rem;
         }
         
@@ -247,13 +279,15 @@
         }
         
         .output-header {
-            padding: 10px 15px;
+            padding: 10px 12px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #ddd;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .output-clear {
@@ -261,7 +295,7 @@
             border: none;
             color: var(--dark);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -270,23 +304,25 @@
         #console-output {
             background-color: var(--dark);
             color: #dfe6e9;
-            padding: 10px 15px;
+            padding: 10px 12px;
             overflow-y: auto;
-            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-family: 'Courier New', Courier, monospace;
             line-height: 1.5;
             flex: 1;
+            font-size: 14px;
         }
         
         .console-message {
             margin-bottom: 5px;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         .console-timestamp {
             color: #636e72;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             flex-shrink: 0;
         }
         
@@ -308,11 +344,11 @@
         
         footer {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
+            margin-top: 15px;
             border-radius: 5px;
         }
         
@@ -321,6 +357,13 @@
             height: 5px;
             background-color: #ddd;
             cursor: row-resize;
+            display: none;
+        }
+        
+        @media (min-width: 992px) {
+            .resizer {
+                display: block;
+            }
         }
         
         .resizer-horizontal {
@@ -328,6 +371,13 @@
             height: 100%;
             background-color: #ddd;
             cursor: col-resize;
+            display: none;
+        }
+        
+        @media (min-width: 992px) {
+            .resizer-horizontal {
+                display: block;
+            }
         }
         
         .tab-close {
@@ -349,27 +399,64 @@
         .theme-selector {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 0.85rem;
         }
         
         .theme-selector select {
-            padding: 5px;
+            padding: 4px;
             border-radius: 4px;
             border: 1px solid #ddd;
+            font-size: 0.8rem;
         }
         
-        @media (max-width: 900px) {
-            .editor-container {
-                flex-direction: column;
+        .mobile-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 5px;
+            padding: 8px;
+            background: #f1f2f6;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-tabs {
+                display: none;
             }
-            
-            .preview {
-                border-left: none;
-                border-top: 1px solid #ddd;
+        }
+        
+        .mobile-tab {
+            padding: 6px 12px;
+            background: #dfe4ea;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .mobile-tab.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .language-select {
+            display: none;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: white;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 767px) {
+            .language-select {
+                display: block;
             }
             
             .editor-tabs {
-                overflow-x: auto;
+                display: none;
             }
         }
     </style>
@@ -379,7 +466,7 @@
         <header>
             <div class="logo">
                 <i class="fas fa-code"></i>
-                <h1>SupremeAmer Web IDE</h1>
+                <h1>SupremeAmer IDE</h1>
             </div>
             <div class="controls">
                 <button class="run-btn" id="run-btn">
@@ -397,21 +484,60 @@
             </div>
         </header>
         
+        <select class="language-select" id="language-select">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="js">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="php">PHP</option>
+            <option value="java">Java</option>
+            <option value="ruby">Ruby</option>
+            <option value="csharp">C#</option>
+            <option value="cpp">C++</option>
+            <option value="swift">Swift</option>
+        </select>
+        
         <div class="editor-container">
             <div class="code-editors">
                 <div class="editor-tabs">
                     <div class="editor-tab active" data-tab="html">
                         <i class="fab fa-html5" style="color: var(--html);"></i> HTML
-                        <span class="tab-close">&times;</span>
                     </div>
                     <div class="editor-tab" data-tab="css">
                         <i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS
-                        <span class="tab-close">&times;</span>
                     </div>
                     <div class="editor-tab" data-tab="js">
                         <i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript
-                        <span class="tab-close">&times;</span>
                     </div>
+                    <div class="editor-tab" data-tab="python">
+                        <i class="fab fa-python" style="color: var(--python);"></i> Python
+                    </div>
+                    <div class="editor-tab" data-tab="php">
+                        <i class="fab fa-php" style="color: var(--php);"></i> PHP
+                    </div>
+                    <div class="editor-tab" data-tab="java">
+                        <i class="fab fa-java" style="color: var(--java);"></i> Java
+                    </div>
+                    <div class="editor-tab" data-tab="ruby">
+                        <i class="fas fa-gem" style="color: var(--ruby);"></i> Ruby
+                    </div>
+                    <div class="editor-tab" data-tab="csharp">
+                        <i class="fas fa-code" style="color: var(--csharp);"></i> C#
+                    </div>
+                    <div class="editor-tab" data-tab="cpp">
+                        <i class="fas fa-file-code" style="color: var(--cpp);"></i> C++
+                    </div>
+                    <div class="editor-tab" data-tab="swift">
+                        <i class="fab fa-swift" style="color: var(--swift);"></i> Swift
+                    </div>
+                </div>
+                
+                <div class="mobile-tabs">
+                    <div class="mobile-tab active" data-tab="html">HTML</div>
+                    <div class="mobile-tab" data-tab="css">CSS</div>
+                    <div class="mobile-tab" data-tab="js">JS</div>
+                    <div class="mobile-tab" data-tab="python">Python</div>
+                    <div class="mobile-tab" data-tab="php">PHP</div>
                 </div>
                 
                 <div class="editor-content">
@@ -472,10 +598,6 @@
         &lt;button onclick="showMessage()"&gt;Click Me!&lt;/button&gt;
         &lt;div id="output"&gt;&lt;/div&gt;
     &lt;/div&gt;
-    
-    &lt;script&gt;
-        // JavaScript can also be included here
-    &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</textarea>
                     </div>
@@ -495,6 +617,17 @@
     border-radius: 5px;
     background-color: #f8f9fa;
     min-height: 50px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        margin: 20px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
 }</textarea>
                     </div>
                     
@@ -510,8 +643,6 @@ function showMessage() {
     
     // Also log to console
     console.log('Button clicked! Message displayed.');
-    console.info('This is an informational message');
-    console.warn('This is a warning message');
 }
 
 // Additional demo function
@@ -521,8 +652,210 @@ function calculate(a, b) {
 
 // Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));
-console.error('This is a sample error message');</textarea>
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));</textarea>
+                    </div>
+                    
+                    <div class="code-editor python-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-python" style="color: var(--python);"></i> Python</span>
+                        </div>
+                        <textarea class="code-area" id="python-code" placeholder="Write your Python here..."># Python code example
+def welcome_message():
+    return "Hello from Python in SupremeAmer IDE!"
+
+def calculate(a, b):
+    return a + b
+
+# Main execution
+if __name__ == "__main__":
+    print(welcome_message())
+    print("5 + 3 =", calculate(5, 3))
+    
+    # Demonstrate list comprehension
+    numbers = [1, 2, 3, 4, 5]
+    squares = [x**2 for x in numbers]
+    print("Squares:", squares)</textarea>
+                    </div>
+                    
+                    <div class="code-editor php-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-php" style="color: var(--php);"></i> PHP</span>
+                        </div>
+                        <textarea class="code-area" id="php-code" placeholder="Write your PHP here..."><?php
+// PHP code example
+function welcomeMessage() {
+    return "Hello from PHP in SupremeAmer IDE!";
+}
+
+function calculate($a, $b) {
+    return $a + $b;
+}
+
+// Main execution
+echo welcomeMessage() . "\n";
+echo "5 + 3 = " . calculate(5, 3) . "\n";
+
+// Demonstrate array manipulation
+$numbers = [1, 2, 3, 4, 5];
+$squares = array_map(function($x) { return $x * $x; }, $numbers);
+echo "Squares: " . implode(", ", $squares) . "\n";
+?></textarea>
+                    </div>
+                    
+                    <div class="code-editor java-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-java" style="color: var(--java);"></i> Java</span>
+                        </div>
+                        <textarea class="code-area" id="java-code" placeholder="Write your Java here...">// Java code example
+public class Main {
+    public static String welcomeMessage() {
+        return "Hello from Java in SupremeAmer IDE!";
+    }
+    
+    public static int calculate(int a, int b) {
+        return a + b;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(welcomeMessage());
+        System.out.println("5 + 3 = " + calculate(5, 3));
+        
+        // Demonstrate array
+        int[] numbers = {1, 2, 3, 4, 5};
+        int[] squares = new int[numbers.length];
+        
+        for (int i = 0; i < numbers.length; i++) {
+            squares[i] = numbers[i] * numbers[i];
+        }
+        
+        System.out.print("Squares: ");
+        for (int square : squares) {
+            System.out.print(square + " ");
+        }
+    }
+}</textarea>
+                    </div>
+                    
+                    <div class="code-editor ruby-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fas fa-gem" style="color: var(--ruby);"></i> Ruby</span>
+                        </div>
+                        <textarea class="code-area" id="ruby-code" placeholder="Write your Ruby here..."># Ruby code example
+def welcome_message
+  "Hello from Ruby in SupremeAmer IDE!"
+end
+
+def calculate(a, b)
+  a + b
+end
+
+# Main execution
+puts welcome_message
+puts "5 + 3 = #{calculate(5, 3)}"
+
+# Demonstrate array manipulation
+numbers = [1, 2, 3, 4, 5]
+squares = numbers.map { |x| x**2 }
+puts "Squares: #{squares.join(', ')}"</textarea>
+                    </div>
+                    
+                    <div class="code-editor csharp-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fas fa-code" style="color: var(--csharp);"></i> C#</span>
+                        </div>
+                        <textarea class="code-area" id="csharp-code" placeholder="Write your C# here...">// C# code example
+using System;
+using System.Linq;
+
+public class Program
+{
+    public static string WelcomeMessage()
+    {
+        return "Hello from C# in SupremeAmer IDE!";
+    }
+    
+    public static int Calculate(int a, int b)
+    {
+        return a + b;
+    }
+    
+    public static void Main()
+    {
+        Console.WriteLine(WelcomeMessage());
+        Console.WriteLine("5 + 3 = " + Calculate(5, 3));
+        
+        // Demonstrate array manipulation
+        int[] numbers = {1, 2, 3, 4, 5};
+        int[] squares = numbers.Select(x => x * x).ToArray();
+        
+        Console.WriteLine("Squares: " + string.Join(", ", squares));
+    }
+}</textarea>
+                    </div>
+                    
+                    <div class="code-editor cpp-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fas fa-file-code" style="color: var(--cpp);"></i> C++</span>
+                        </div>
+                        <textarea class="code-area" id="cpp-code" placeholder="Write your C++ here...">// C++ code example
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+string welcomeMessage() {
+    return "Hello from C++ in SupremeAmer IDE!";
+}
+
+int calculate(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    cout << welcomeMessage() << endl;
+    cout << "5 + 3 = " << calculate(5, 3) << endl;
+    
+    // Demonstrate vector manipulation
+    vector<int> numbers = {1, 2, 3, 4, 5};
+    vector<int> squares;
+    
+    transform(numbers.begin(), numbers.end(), back_inserter(squares),
+              [](int x) { return x * x; });
+    
+    cout << "Squares: ";
+    for (size_t i = 0; i < squares.size(); ++i) {
+        if (i != 0) cout << ", ";
+        cout << squares[i];
+    }
+    cout << endl;
+    
+    return 0;
+}</textarea>
+                    </div>
+                    
+                    <div class="code-editor swift-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-swift" style="color: var(--swift);"></i> Swift</span>
+                        </div>
+                        <textarea class="code-area" id="swift-code" placeholder="Write your Swift here...">// Swift code example
+func welcomeMessage() -> String {
+    return "Hello from Swift in SupremeAmer IDE!"
+}
+
+func calculate(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+// Main execution
+print(welcomeMessage())
+print("5 + 3 = \(calculate(a: 5, b: 3))")
+
+// Demonstrate array manipulation
+let numbers = [1, 2, 3, 4, 5]
+let squares = numbers.map { $0 * $0 }
+print("Squares: \(squares)")</textarea>
                     </div>
                 </div>
             </div>
@@ -535,9 +868,6 @@ console.error('This is a sample error message');</textarea>
                     <div class="preview-controls">
                         <button id="refresh-btn">
                             <i class="fas fa-sync-alt"></i> Refresh
-                        </button>
-                        <button id="fullscreen-btn">
-                            <i class="fas fa-expand"></i> Fullscreen
                         </button>
                     </div>
                 </div>
@@ -567,6 +897,13 @@ console.error('This is a sample error message');</textarea>
             const htmlCode = document.getElementById('html-code');
             const cssCode = document.getElementById('css-code');
             const jsCode = document.getElementById('js-code');
+            const pythonCode = document.getElementById('python-code');
+            const phpCode = document.getElementById('php-code');
+            const javaCode = document.getElementById('java-code');
+            const rubyCode = document.getElementById('ruby-code');
+            const csharpCode = document.getElementById('csharp-code');
+            const cppCode = document.getElementById('cpp-code');
+            const swiftCode = document.getElementById('swift-code');
             const previewFrame = document.getElementById('preview-frame');
             const consoleOutput = document.getElementById('console-output');
             const runBtn = document.getElementById('run-btn');
@@ -574,11 +911,11 @@ console.error('This is a sample error message');</textarea>
             const exportBtn = document.getElementById('export-btn');
             const resetBtn = document.getElementById('reset-btn');
             const refreshBtn = document.getElementById('refresh-btn');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
             const clearConsoleBtn = document.getElementById('clear-console');
             const editorTabs = document.querySelectorAll('.editor-tab');
+            const mobileTabs = document.querySelectorAll('.mobile-tab');
+            const languageSelect = document.getElementById('language-select');
             const codeEditors = document.querySelectorAll('.code-editor');
-            const themeSelector = document.getElementById('theme');
             
             // Store original console methods
             const originalConsole = {
@@ -777,10 +1114,6 @@ console.error('This is a sample error message');</textarea>
         <button onclick="showMessage()">Click Me!</button>
         <div id="output"></div>
     </div>
-    
-    <script>
-        // JavaScript can also be included here
-    </script>
 </body>
 </html>`;
                     
@@ -795,6 +1128,17 @@ console.error('This is a sample error message');</textarea>
     border-radius: 5px;
     background-color: #f8f9fa;
     min-height: 50px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        margin: 20px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
 }`;
                     
                     jsCode.value = `// JavaScript code
@@ -805,8 +1149,6 @@ function showMessage() {
     
     // Also log to console
     console.log('Button clicked! Message displayed.');
-    console.info('This is an informational message');
-    console.warn('This is a warning message');
 }
 
 // Additional demo function
@@ -816,8 +1158,7 @@ function calculate(a, b) {
 
 // Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));
-console.error('This is a sample error message');`;
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     
                     runCode();
                     console.log('Editor reset to default code!');
@@ -829,7 +1170,7 @@ console.error('This is a sample error message');`;
                 consoleOutput.innerHTML = '';
             });
             
-            // Tab switching
+            // Tab switching for desktop
             editorTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabName = this.getAttribute('data-tab');
@@ -837,6 +1178,18 @@ console.error('This is a sample error message');`;
                     // Activate tab
                     editorTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
+                    
+                    // Update mobile tabs
+                    mobileTabs.forEach(t => {
+                        if (t.getAttribute('data-tab') === tabName) {
+                            t.classList.add('active');
+                        } else {
+                            t.classList.remove('active');
+                        }
+                    });
+                    
+                    // Update language select
+                    languageSelect.value = tabName;
                     
                     // Show corresponding editor
                     codeEditors.forEach(editor => {
@@ -846,15 +1199,62 @@ console.error('This is a sample error message');`;
                 });
             });
             
-            // Fullscreen preview
-            fullscreenBtn.addEventListener('click', function() {
-                if (previewFrame.requestFullscreen) {
-                    previewFrame.requestFullscreen();
-                } else if (previewFrame.webkitRequestFullscreen) {
-                    previewFrame.webkitRequestFullscreen();
-                } else if (previewFrame.msRequestFullscreen) {
-                    previewFrame.msRequestFullscreen();
-                }
+            // Tab switching for mobile tabs
+            mobileTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Activate tab
+                    mobileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update desktop tabs
+                    editorTabs.forEach(t => {
+                        if (t.getAttribute('data-tab') === tabName) {
+                            t.classList.add('active');
+                        } else {
+                            t.classList.remove('active');
+                        }
+                    });
+                    
+                    // Update language select
+                    languageSelect.value = tabName;
+                    
+                    // Show corresponding editor
+                    codeEditors.forEach(editor => {
+                        editor.style.display = 'none';
+                    });
+                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
+                });
+            });
+            
+            // Language select change
+            languageSelect.addEventListener('change', function() {
+                const tabName = this.value;
+                
+                // Activate tab
+                editorTabs.forEach(t => {
+                    if (t.getAttribute('data-tab') === tabName) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+                
+                // Update mobile tabs
+                mobileTabs.forEach(t => {
+                    if (t.getAttribute('data-tab') === tabName) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+                
+                // Show corresponding editor
+                codeEditors.forEach(editor => {
+                    editor.style.display = 'none';
+                });
+                document.querySelector(`.${tabName}-editor`).style.display = 'flex';
             });
             
             // Load saved code from localStorage
@@ -881,48 +1281,21 @@ console.error('This is a sample error message');`;
                 }
             });
             
-            // Resizer functionality
-            const verticalResizer = document.getElementById('vertical-resizer');
-            const horizontalResizer = document.getElementById('horizontal-resizer');
-            const editorsSection = document.querySelector('.code-editors');
-            const previewSection = document.querySelector('.preview');
-            const outputSection = document.querySelector('.output-container');
+            // Handle mobile view
+            function handleMobileView() {
+                if (window.innerWidth < 768) {
+                    // Mobile-specific adjustments
+                    document.querySelectorAll('.code-area').forEach(area => {
+                        area.style.fontSize = '16px'; // Prevent zoom on iOS
+                    });
+                }
+            }
             
-            verticalResizer.addEventListener('mousedown', function(e) {
-                document.addEventListener('mousemove', resizeVertically);
-                document.addEventListener('mouseup', stopResize);
-                
-                function resizeVertically(e) {
-                    const containerRect = document.querySelector('.editor-container').getBoundingClientRect();
-                    const percentage = (e.clientX - containerRect.left) / containerRect.width * 100;
-                    
-                    editorsSection.style.width = `${percentage}%`;
-                    previewSection.style.width = `${100 - percentage}%`;
-                }
-                
-                function stopResize() {
-                    document.removeEventListener('mousemove', resizeVertically);
-                    document.removeEventListener('mouseup', stopResize);
-                }
-            });
+            // Initial call
+            handleMobileView();
             
-            horizontalResizer.addEventListener('mousedown', function(e) {
-                document.addEventListener('mousemove', resizeHorizontally);
-                document.addEventListener('mouseup', stopResize);
-                
-                function resizeHorizontally(e) {
-                    const containerRect = document.querySelector('.container').getBoundingClientRect();
-                    const percentage = (e.clientY - containerRect.top) / containerRect.height * 100;
-                    
-                    document.querySelector('.editor-container').style.height = `${percentage}%`;
-                    outputSection.style.height = `${100 - percentage}%`;
-                }
-                
-                function stopResize() {
-                    document.removeEventListener('mousemove', resizeHorizontally);
-                    document.removeEventListener('mouseup', stopResize);
-                }
-            });
+            // Listen for resize events
+            window.addEventListener('resize', handleMobileView);
         });
     </script>
 </body>

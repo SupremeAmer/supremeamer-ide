@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupremeAmer Web IDE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #4a69bd;
+            --success: #00b894;
+            --warning: #e17055;
+            --info: #6c5ce7;
+            --dark: #2d3436;
+            --light: #f8f9fa;
+            --html: #e34c26;
+            --css: #264de4;
+            --js: #f0db4f;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 95vh;
+        }
+        
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .run-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .run-btn:hover {
+            background-color: #009d7a;
+            transform: translateY(-2px);
+        }
+        
+        .save-btn {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background-color: #5649c9;
+            transform: translateY(-2px);
+        }
+        
+        .reset-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background-color: #d15b3f;
+            transform: translateY(-2px);
+        }
+        
+        .export-btn {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .export-btn:hover {
+            background-color: #1e2223;
+            transform: translateY(-2px);
+        }
+        
+        .editor-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .code-editors {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .editor-tabs {
+            display: flex;
+            background-color: var(--light);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .editor-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-right: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .editor-tab.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .editor-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .code-editor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .editor-header {
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-header span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .code-area {
+            flex: 1;
+            padding: 15px;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 15px;
+            resize: none;
+            border: none;
+            outline: none;
+            line-height: 1.5;
+            tab-size: 4;
+            -moz-tab-size: 4;
+            overflow: auto;
+        }
+        
+        .preview {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #ddd;
+            overflow: hidden;
+        }
+        
+        .preview-header {
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .preview-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .preview-controls button {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        #preview-frame {
+            flex: 1;
+            border: none;
+            background-color: white;
+        }
+        
+        .output-container {
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .output-header {
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .output-clear {
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        #console-output {
+            background-color: var(--dark);
+            color: #dfe6e9;
+            padding: 10px 15px;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            line-height: 1.5;
+            flex: 1;
+        }
+        
+        .console-message {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .console-timestamp {
+            color: #636e72;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        
+        .console-error {
+            color: #ff7675;
+        }
+        
+        .console-log {
+            color: #74b9ff;
+        }
+        
+        .console-warn {
+            color: #ffeaa7;
+        }
+        
+        .console-info {
+            color: #55efc4;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: white;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        
+        .resizer {
+            width: 100%;
+            height: 5px;
+            background-color: #ddd;
+            cursor: row-resize;
+        }
+        
+        .resizer-horizontal {
+            width: 5px;
+            height: 100%;
+            background-color: #ddd;
+            cursor: col-resize;
+        }
+        
+        .tab-close {
+            margin-left: 5px;
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tab-close:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .theme-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-selector select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        @media (max-width: 900px) {
+            .editor-container {
+                flex-direction: column;
+            }
+            
+            .preview {
+                border-left: none;
+                border-top: 1px solid #ddd;
+            }
+            
+            .editor-tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <h1>SupremeAmer Web IDE</h1>
+            </div>
+            <div class="controls">
+                <button class="run-btn" id="run-btn">
+                    <i class="fas fa-play"></i> Run
+                </button>
+                <button class="save-btn" id="save-btn">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="export-btn" id="export-btn">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="reset-btn" id="reset-btn">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+        </header>
+        
+        <div class="editor-container">
+            <div class="code-editors">
+                <div class="editor-tabs">
+                    <div class="editor-tab active" data-tab="html">
+                        <i class="fab fa-html5" style="color: var(--html);"></i> HTML
+                        <span class="tab-close">&times;</span>
+                    </div>
+                    <div class="editor-tab" data-tab="css">
+                        <i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS
+                        <span class="tab-close">&times;</span>
+                    </div>
+                    <div class="editor-tab" data-tab="js">
+                        <i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript
+                        <span class="tab-close">&times;</span>
+                    </div>
+                </div>
+                
+                <div class="editor-content">
+                    <div class="code-editor html-editor" style="display: flex;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-html5" style="color: var(--html);"></i> HTML</span>
+                            <div class="theme-selector">
+                                <label for="theme">Theme:</label>
+                                <select id="theme">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="monokai">Monokai</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea class="code-area" id="html-code" placeholder="Write your HTML here...">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;SupremeAmer App&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #3c5aa6;
+            transform: scale(1.05);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Welcome to SupremeAmer&lt;/h1&gt;
+        &lt;p&gt;This is a sample application built with our Web IDE&lt;/p&gt;
+        &lt;button onclick="showMessage()"&gt;Click Me!&lt;/button&gt;
+        &lt;div id="output"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;script&gt;
+        // JavaScript can also be included here
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                    </div>
+                    
+                    <div class="code-editor css-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS</span>
+                        </div>
+                        <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
+.container {
+    transition: all 0.3s ease;
+}
+
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    min-height: 50px;
+}</textarea>
+                    </div>
+                    
+                    <div class="code-editor js-editor" style="display: none;">
+                        <div class="editor-header">
+                            <span><i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript</span>
+                        </div>
+                        <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
+function showMessage() {
+    const output = document.getElementById('output');
+    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
+    output.style.backgroundColor = '#e8f5e9';
+    
+    // Also log to console
+    console.log('Button clicked! Message displayed.');
+    console.info('This is an informational message');
+    console.warn('This is a warning message');
+}
+
+// Additional demo function
+function calculate(a, b) {
+    return a + b;
+}
+
+// Display initial message
+console.log('Welcome to SupremeAmer Web IDE!');
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));
+console.error('This is a sample error message');</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="resizer-horizontal" id="vertical-resizer"></div>
+            
+            <div class="preview">
+                <div class="preview-header">
+                    <span><i class="fas fa-play-circle" style="color: var(--success);"></i> Live Preview</span>
+                    <div class="preview-controls">
+                        <button id="refresh-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button id="fullscreen-btn">
+                            <i class="fas fa-expand"></i> Fullscreen
+                        </button>
+                    </div>
+                </div>
+                <iframe id="preview-frame"></iframe>
+            </div>
+        </div>
+        
+        <div class="resizer" id="horizontal-resizer"></div>
+        
+        <div class="output-container">
+            <div class="output-header">
+                <span><i class="fas fa-terminal"></i> Console Output</span>
+                <button class="output-clear" id="clear-console">
+                    <i class="fas fa-trash"></i> Clear Console
+                </button>
+            </div>
+            <div id="console-output"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const htmlCode = document.getElementById('html-code');
+            const cssCode = document.getElementById('css-code');
+            const jsCode = document.getElementById('js-code');
+            const previewFrame = document.getElementById('preview-frame');
+            const consoleOutput = document.getElementById('console-output');
+            const runBtn = document.getElementById('run-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const clearConsoleBtn = document.getElementById('clear-console');
+            const editorTabs = document.querySelectorAll('.editor-tab');
+            const codeEditors = document.querySelectorAll('.code-editor');
+            const themeSelector = document.getElementById('theme');
+            
+            // Store original console methods
+            const originalConsole = {
+                log: console.log,
+                error: console.error,
+                warn: console.warn,
+                info: console.info
+            };
+            
+            // Override console methods to capture output
+            console.log = function(...args) {
+                originalConsole.log.apply(console, args);
+                logToConsole(args, 'log');
+            };
+            
+            console.error = function(...args) {
+                originalConsole.error.apply(console, args);
+                logToConsole(args, 'error');
+            };
+            
+            console.warn = function(...args) {
+                originalConsole.warn.apply(console, args);
+                logToConsole(args, 'warn');
+            };
+            
+            console.info = function(...args) {
+                originalConsole.info.apply(console, args);
+                logToConsole(args, 'info');
+            };
+            
+            function logToConsole(args, type) {
+                const timestamp = new Date().toLocaleTimeString();
+                const message = args.map(arg => {
+                    if (typeof arg === 'object') {
+                        return JSON.stringify(arg);
+                    }
+                    return arg;
+                }).join(' ');
+                
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('console-message', `console-${type}`);
+                
+                const timestampElement = document.createElement('span');
+                timestampElement.classList.add('console-timestamp');
+                timestampElement.textContent = `[${timestamp}]`;
+                
+                const contentElement = document.createElement('span');
+                contentElement.textContent = message;
+                
+                messageElement.appendChild(timestampElement);
+                messageElement.appendChild(contentElement);
+                
+                consoleOutput.appendChild(messageElement);
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+            
+            function runCode() {
+                const html = htmlCode.value;
+                const css = cssCode.value;
+                const js = jsCode.value;
+                
+                // Clear console
+                consoleOutput.innerHTML = '';
+                
+                const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                
+                // Write the code to the iframe
+                previewDocument.open();
+                previewDocument.write(`
+                    ${html}
+                    <style>${css}</style>
+                    <script>
+                        // Override console methods in the iframe
+                        const originalConsole = {
+                            log: console.log,
+                            error: console.error,
+                            warn: console.warn,
+                            info: console.info
+                        };
+                        
+                        console.log = function(...args) {
+                            originalConsole.log.apply(console, args);
+                            window.parent.logToConsole(args, 'log');
+                        };
+                        
+                        console.error = function(...args) {
+                            originalConsole.error.apply(console, args);
+                            window.parent.logToConsole(args, 'error');
+                        };
+                        
+                        console.warn = function(...args) {
+                            originalConsole.warn.apply(console, args);
+                            window.parent.logToConsole(args, 'warn');
+                        };
+                        
+                        console.info = function(...args) {
+                            originalConsole.info.apply(console, args);
+                            window.parent.logToConsole(args, 'info');
+                        };
+                    <\/script>
+                    <script>${js}<\/script>
+                `);
+                previewDocument.close();
+            }
+            
+            // Run code on button click
+            runBtn.addEventListener('click', runCode);
+            refreshBtn.addEventListener('click', runCode);
+            
+            // Save code to localStorage
+            saveBtn.addEventListener('click', function() {
+                localStorage.setItem('supremeamer_html', htmlCode.value);
+                localStorage.setItem('supremeamer_css', cssCode.value);
+                localStorage.setItem('supremeamer_js', jsCode.value);
+                
+                console.log('Code saved successfully!');
+            });
+            
+            // Export code as HTML file
+            exportBtn.addEventListener('click', function() {
+                const html = htmlCode.value;
+                const css = cssCode.value;
+                const js = jsCode.value;
+                
+                const fullHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SupremeAmer App</title>
+    <style>${css}</style>
+</head>
+<body>
+    ${html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')}
+    <script>${js}<\/script>
+</body>
+</html>`;
+                
+                const blob = new Blob([fullHtml], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'supremeamer_app.html';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+                console.log('Code exported as HTML file!');
+            });
+            
+            // Reset code to default
+            resetBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all code? This cannot be undone.')) {
+                    htmlCode.value = `<!DOCTYPE html>
+<html>
+<head>
+    <title>SupremeAmer App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #3c5aa6;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to SupremeAmer</h1>
+        <p>This is a sample application built with our Web IDE</p>
+        <button onclick="showMessage()">Click Me!</button>
+        <div id="output"></div>
+    </div>
+    
+    <script>
+        // JavaScript can also be included here
+    </script>
+</body>
+</html>`;
+                    
+                    cssCode.value = `/* Additional CSS styles */
+.container {
+    transition: all 0.3s ease;
+}
+
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    min-height: 50px;
+}`;
+                    
+                    jsCode.value = `// JavaScript code
+function showMessage() {
+    const output = document.getElementById('output');
+    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
+    output.style.backgroundColor = '#e8f5e9';
+    
+    // Also log to console
+    console.log('Button clicked! Message displayed.');
+    console.info('This is an informational message');
+    console.warn('This is a warning message');
+}
+
+// Additional demo function
+function calculate(a, b) {
+    return a + b;
+}
+
+// Display initial message
+console.log('Welcome to SupremeAmer Web IDE!');
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));
+console.error('This is a sample error message');`;
+                    
+                    runCode();
+                    console.log('Editor reset to default code!');
+                }
+            });
+            
+            // Clear console
+            clearConsoleBtn.addEventListener('click', function() {
+                consoleOutput.innerHTML = '';
+            });
+            
+            // Tab switching
+            editorTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Activate tab
+                    editorTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding editor
+                    codeEditors.forEach(editor => {
+                        editor.style.display = 'none';
+                    });
+                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
+                });
+            });
+            
+            // Fullscreen preview
+            fullscreenBtn.addEventListener('click', function() {
+                if (previewFrame.requestFullscreen) {
+                    previewFrame.requestFullscreen();
+                } else if (previewFrame.webkitRequestFullscreen) {
+                    previewFrame.webkitRequestFullscreen();
+                } else if (previewFrame.msRequestFullscreen) {
+                    previewFrame.msRequestFullscreen();
+                }
+            });
+            
+            // Load saved code from localStorage
+            if (localStorage.getItem('supremeamer_html')) {
+                htmlCode.value = localStorage.getItem('supremeamer_html');
+                cssCode.value = localStorage.getItem('supremeamer_css');
+                jsCode.value = localStorage.getItem('supremeamer_js');
+                console.log('Previously saved code loaded!');
+            }
+            
+            // Run code on initial load
+            runCode();
+            
+            // Add event listeners for Ctrl+S and Ctrl+Enter to run code
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    runCode();
+                }
+                
+                if (e.key === 'F5') {
+                    e.preventDefault();
+                    runCode();
+                }
+            });
+            
+            // Resizer functionality
+            const verticalResizer = document.getElementById('vertical-resizer');
+            const horizontalResizer = document.getElementById('horizontal-resizer');
+            const editorsSection = document.querySelector('.code-editors');
+            const previewSection = document.querySelector('.preview');
+            const outputSection = document.querySelector('.output-container');
+            
+            verticalResizer.addEventListener('mousedown', function(e) {
+                document.addEventListener('mousemove', resizeVertically);
+                document.addEventListener('mouseup', stopResize);
+                
+                function resizeVertically(e) {
+                    const containerRect = document.querySelector('.editor-container').getBoundingClientRect();
+                    const percentage = (e.clientX - containerRect.left) / containerRect.width * 100;
+                    
+                    editorsSection.style.width = `${percentage}%`;
+                    previewSection.style.width = `${100 - percentage}%`;
+                }
+                
+                function stopResize() {
+                    document.removeEventListener('mousemove', resizeVertically);
+                    document.removeEventListener('mouseup', stopResize);
+                }
+            });
+            
+            horizontalResizer.addEventListener('mousedown', function(e) {
+                document.addEventListener('mousemove', resizeHorizontally);
+                document.addEventListener('mouseup', stopResize);
+                
+                function resizeHorizontally(e) {
+                    const containerRect = document.querySelector('.container').getBoundingClientRect();
+                    const percentage = (e.clientY - containerRect.top) / containerRect.height * 100;
+                    
+                    document.querySelector('.editor-container').style.height = `${percentage}%`;
+                    outputSection.style.height = `${100 - percentage}%`;
+                }
+                
+                function stopResize() {
+                    document.removeEventListener('mousemove', resizeHorizontally);
+                    document.removeEventListener('mouseup', stopResize);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

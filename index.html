@@ -3,1618 +3,727 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SupremeAmer Web IDE Pro</title>
+    <title>Web-Based IDE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/ace.min.js" type="text/javascript" charset="utf-8"></script>
     <style>
+        :root {
+            --primary-color: #4a6bef;
+            --secondary-color: #363636;
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --editor-bg: #ffffff;
+            --preview-bg: #ffffff;
+            --border-color: #ddd;
+            --header-height: 50px;
+            --footer-height: 30px;
+        }
+
+        .dark-mode {
+            --primary-color: #6c8fff;
+            --secondary-color: #2d2d2d;
+            --bg-color: #1e1e1e;
+            --text-color: #e1e1e1;
+            --editor-bg: #252526;
+            --preview-bg: #1e1e1e;
+            --border-color: #444;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
-        
-        :root {
-            --primary: #2c3e50;
-            --secondary: #4a69bd;
-            --success: #00b894;
-            --warning: #e17055;
-            --info: #6c5ce7;
-            --dark: #2d3436;
-            --light: #f8f9fa;
-            --html: #e34c26;
-            --css: #264de4;
-            --js: #f0db4f;
-            --python: #3776ab;
-            --php: #777bb4;
-            --java: #007396;
-            --ruby: #cc342d;
-            --csharp: #239120;
-            --cpp: #00599c;
-            --swift: #fa7343;
-            --go: #00add8;
-            --rust: #000000;
-            --sidebar-width: 250px;
-        }
-        
+
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            min-height: 100vh;
-            padding: 10px;
-        }
-        
-        .container {
-            max-width: 1800px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 98vh;
+            overflow: hidden;
         }
-        
+
         header {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: var(--header-height);
+            background-color: var(--secondary-color);
             color: white;
-            padding: 12px 15px;
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
-            gap: 10px;
+            padding: 0 20px;
         }
-        
+
         .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .logo i {
-            font-size: 1.8rem;
+            color: var(--primary-color);
         }
-        
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        
+
         .controls {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
-        
+
         button {
-            padding: 8px 12px;
+            background-color: var(--primary-color);
+            color: white;
             border: none;
-            border-radius: 5px;
+            padding: 8px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
+            gap: 5px;
         }
-        
-        .run-btn {
-            background-color: var(--success);
-            color: white;
+
+        button:hover {
+            opacity: 0.9;
         }
-        
-        .run-btn:hover {
-            background-color: #009d7a;
+
+        button.secondary {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--primary-color);
         }
-        
-        .save-btn {
-            background-color: var(--info);
-            color: white;
-        }
-        
-        .save-btn:hover {
-            background-color: #5649c9;
-        }
-        
-        .reset-btn {
-            background-color: var(--warning);
-            color: white;
-        }
-        
-        .reset-btn:hover {
-            background-color: #d15b3f;
-        }
-        
-        .export-btn {
-            background-color: var(--dark);
-            color: white;
-        }
-        
-        .export-btn:hover {
-            background-color: #1e2223;
-        }
-        
-        .upload-btn {
-            background-color: #8e44ad;
-            color: white;
-        }
-        
-        .upload-btn:hover {
-            background-color: #7d3c98;
-        }
-        
-        .main-content {
+
+        .main-container {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
-        
+
         .sidebar {
-            width: var(--sidebar-width);
-            background: #f8f9fa;
-            border-right: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        @media (max-width: 992px) {
-            .sidebar {
-                position: absolute;
-                left: -100%;
-                z-index: 100;
-                height: 100%;
-                box-shadow: 3px 0 10px rgba(0,0,0,0.1);
-            }
-            
-            .sidebar.open {
-                left: 0;
-            }
-        }
-        
-        .sidebar-header {
+            width: 200px;
+            background-color: var(--secondary-color);
+            color: white;
             padding: 15px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 992px) {
-            .sidebar-toggle {
-                display: block;
-            }
-        }
-        
-        .file-explorer {
-            flex: 1;
             overflow-y: auto;
-            padding: 10px;
         }
-        
+
+        .file-tree {
+            margin-top: 15px;
+        }
+
         .file-item {
-            padding: 8px 10px;
+            padding: 8px 5px;
+            cursor: pointer;
             border-radius: 4px;
             margin-bottom: 5px;
-            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+            gap: 5px;
         }
-        
+
         .file-item:hover {
-            background: #e9ecef;
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .file-item.active {
-            background: #dee2e6;
-            font-weight: 600;
+            background-color: var(--primary-color);
         }
-        
+
         .editor-container {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
-        
-        @media (min-width: 992px) {
-            .editor-container {
-                flex-direction: row;
-            }
-        }
-        
-        .code-editors {
-            flex: 3;
+
+        .editor-header {
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            background-color: var(--editor-bg);
+            border-bottom: 1px solid var(--border-color);
         }
-        
-        .editor-tabs {
-            display: flex;
-            background-color: var(--light);
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .editor-tab {
+
+        .tab {
             padding: 10px 15px;
             cursor: pointer;
-            font-weight: 600;
-            border-right: 1px solid #ddd;
+            background-color: var(--editor-bg);
+            border-right: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            font-size: 0.9rem;
+            gap: 5px;
         }
-        
-        .editor-tab.active {
-            background-color: white;
-            border-bottom: 3px solid var(--secondary);
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
         }
-        
+
         .editor-content {
             flex: 1;
             display: flex;
             overflow: hidden;
         }
-        
-        .code-editor {
+
+        .editor-panel {
+            flex: 1;
+            position: relative;
+            border-right: 1px solid var(--border-color);
+        }
+
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            font-size: 16px;
+        }
+
+        .preview-panel {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
-        
-        .editor-header {
-            padding: 10px 12px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .editor-header span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.95rem;
-        }
-        
-        .code-area {
-            flex: 1;
-            padding: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            resize: none;
-            border: none;
-            outline: none;
-            line-height: 1.5;
-            tab-size: 4;
-            -moz-tab-size: 4;
-            overflow: auto;
-        }
-        
-        .preview {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            border-top: 1px solid #ddd;
-            overflow: hidden;
-        }
-        
-        @media (min-width: 992px) {
-            .preview {
-                border-top: none;
-                border-left: 1px solid #ddd;
-            }
-        }
-        
+
         .preview-header {
-            padding: 10px 12px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
-            font-weight: 600;
+            padding: 10px;
+            background-color: var(--preview-bg);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: center;
         }
-        
-        .preview-controls {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .preview-controls button {
-            padding: 5px 8px;
-            font-size: 0.8rem;
-        }
-        
-        #preview-frame {
+
+        #preview {
             flex: 1;
-            border: none;
+            padding: 15px;
+            overflow: auto;
             background-color: white;
         }
-        
-        .output-container {
-            height: 150px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .output-header {
-            padding: 10px 12px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .output-clear {
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        #console-output {
-            background-color: var(--dark);
-            color: #dfe6e9;
-            padding: 10px 12px;
-            overflow-y: auto;
-            font-family: 'Courier New', Courier, monospace;
-            line-height: 1.5;
+
+        #console {
             flex: 1;
-            font-size: 14px;
+            padding: 15px;
+            overflow: auto;
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            display: none;
         }
-        
-        .console-message {
-            margin-bottom: 5px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .console-timestamp {
-            color: #636e72;
-            font-size: 0.75rem;
-            flex-shrink: 0;
-        }
-        
-        .console-error {
-            color: #ff7675;
-        }
-        
-        .console-log {
-            color: #74b9ff;
-        }
-        
-        .console-warn {
-            color: #ffeaa7;
-        }
-        
-        .console-info {
-            color: #55efc4;
-        }
-        
+
         footer {
-            text-align: center;
-            padding: 12px;
+            height: var(--footer-height);
+            background-color: var(--secondary-color);
             color: white;
-            font-size: 0.85rem;
-            background: rgba(0, 0, 0, 0.2);
-            margin-top: 15px;
-            border-radius: 5px;
-        }
-        
-        .resizer {
-            width: 100%;
-            height: 5px;
-            background-color: #ddd;
-            cursor: row-resize;
-            display: none;
-        }
-        
-        @media (min-width: 992px) {
-            .resizer {
-                display: block;
-            }
-        }
-        
-        .resizer-horizontal {
-            width: 5px;
-            height: 100%;
-            background-color: #ddd;
-            cursor: col-resize;
-            display: none;
-        }
-        
-        @media (min-width: 992px) {
-            .resizer-horizontal {
-                display: block;
-            }
-        }
-        
-        .tab-close {
-            margin-left: 5px;
-            cursor: pointer;
-            padding: 2px;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-        }
-        
-        .tab-close:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        .theme-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-        }
-        
-        .theme-selector select {
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
+            padding: 0 20px;
             font-size: 0.8rem;
         }
-        
-        .mobile-tabs {
+
+        .theme-toggle {
+            cursor: pointer;
             display: flex;
-            overflow-x: auto;
+            align-items: center;
             gap: 5px;
-            padding: 8px;
-            background: #f1f2f6;
-            border-bottom: 1px solid #ddd;
         }
-        
-        @media (min-width: 768px) {
-            .mobile-tabs {
-                display: none;
-            }
-        }
-        
-        .mobile-tab {
-            padding: 6px 12px;
-            background: #dfe4ea;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        
-        .mobile-tab.active {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .language-select {
-            display: none;
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background: white;
-            font-weight: 600;
-        }
-        
-        @media (max-width: 767px) {
-            .language-select {
-                display: block;
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
             }
             
-            .editor-tabs {
-                display: none;
+            .sidebar {
+                width: 100%;
+                height: 150px;
             }
-        }
-        
-        .upload-area {
-            padding: 15px;
-            border-top: 1px solid #ddd;
-        }
-        
-        .drop-zone {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .drop-zone:hover {
-            border-color: #4a69bd;
-            background: #f8f9fa;
-        }
-        
-        .drop-zone i {
-            font-size: 2rem;
-            color: #4a69bd;
-            margin-bottom: 10px;
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .close-modal {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .progress-bar {
-            height: 20px;
-            background: #f1f2f6;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #00b894, #00a382);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .collapsible {
-            cursor: pointer;
-            padding: 10px;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #e9ecef;
-            border-radius: 4px;
-            margin-bottom: 5px;
-        }
-        
-        .collapsible-content {
-            padding: 0 10px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-        
-        .file-tree {
-            padding-left: 20px;
-        }
-        
-        .dark-mode {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --dark: #121212;
-            --light: #2d3436;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        }
-        
-        .dark-mode .container {
-            background-color: rgba(45, 52, 54, 0.95);
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .sidebar {
-            background: #2d3436;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .file-item:hover {
-            background: #3c4345;
-        }
-        
-        .dark-mode .file-item.active {
-            background: #4a5153;
-        }
-        
-        .dark-mode .code-area {
-            background: #2d3436;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .editor-header,
-        .dark-mode .preview-header,
-        .dark-mode .output-header,
-        .dark-mode .editor-tabs {
-            background: #3c4345;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .editor-tab.active {
-            background: #2d3436;
-        }
-        
-        .dark-mode .mobile-tab {
-            background: #3c4345;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .mobile-tab.active {
-            background: var(--secondary);
+            
+            .editor-content {
+                flex-direction: column;
+            }
+            
+            .editor-panel, .preview-panel {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-code"></i>
-                <h1>SupremeAmer IDE Pro</h1>
-            </div>
-            <div class="controls">
-                <button class="sidebar-toggle" id="sidebar-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <button class="run-btn" id="run-btn">
-                    <i class="fas fa-play"></i> Run
-                </button>
-                <button class="save-btn" id="save-btn">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="upload-btn" id="upload-btn">
-                    <i class="fas fa-upload"></i> Upload
-                </button>
-                <button class="export-btn" id="export-btn">
-                    <i class="fas fa-download"></i> Export
-                </button>
-                <button class="reset-btn" id="reset-btn">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
-                <button class="theme-toggle" id="theme-toggle">
-                    <i class="fas fa-moon"></i> Dark
-                </button>
-            </div>
-        </header>
-        
-        <div class="main-content">
-            <div class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <h3>File Explorer</h3>
-                    <button class="sidebar-toggle" id="close-sidebar">
-                        <i class="fas fa-times"></i>
-                    </button>
+    <header>
+        <div class="logo">
+            <i class="fas fa-code"></i>
+            <span>Web IDE</span>
+        </div>
+        <div class="controls">
+            <button id="run-btn">
+                <i class="fas fa-play"></i> Run
+            </button>
+            <button id="clear-btn" class="secondary">
+                <i class="fas fa-broom"></i> Clear
+            </button>
+            <button id="save-btn" class="secondary">
+                <i class="fas fa-save"></i> Save
+            </button>
+            <button id="download-btn" class="secondary">
+                <i class="fas fa-download"></i> Download
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <h3>Project Files</h3>
+            <div class="file-tree">
+                <div class="file-item active" data-file="index.html">
+                    <i class="fab fa-html5"></i> index.html
                 </div>
-                
-                <div class="file-explorer">
-                    <div class="collapsible">
-                        <span>Project Files</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="collapsible-content">
-                        <div class="file-tree">
-                            <div class="file-item active">
-                                <i class="fab fa-html5" style="color: var(--html);"></i>
-                                index.html
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-css3-alt" style="color: var(--css);"></i>
-                                style.css
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                script.js
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                assets
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                components
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="collapsible">
-                        <span>External Libraries</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="collapsible-content">
-                        <div class="file-tree">
-                            <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                react.js
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                vue.js
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                jquery.js
-                            </div>
-                        </div>
-                    </div>
+                <div class="file-item" data-file="style.css">
+                    <i class="fab fa-css3-alt"></i> style.css
                 </div>
-                
-                <div class="upload-area">
-                    <label for="file-upload" class="drop-zone" id="drop-zone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop files or folders here</p>
-                        <p>or click to browse</p>
-                    </label>
-                    <input type="file" id="file-upload" class="file-input" multiple webkitdirectory>
+                <div class="file-item" data-file="script.js">
+                    <i class="fab fa-js"></i> script.js
+                </div>
+                <div class="file-item" data-file="main.py">
+                    <i class="fab fa-python"></i> main.py
                 </div>
             </div>
-            
-            <div class="editor-container">
-                <div class="code-editors">
-                    <select class="language-select" id="language-select">
-                        <option value="html">HTML</option>
-                        <option value="css">CSS</option>
-                        <option value="js">JavaScript</option>
-                        <option value="python">Python</option>
-                        <option value="php">PHP</option>
-                        <option value="java">Java</option>
-                        <option value="ruby">Ruby</option>
-                        <option value="csharp">C#</option>
-                        <option value="cpp">C++</option>
-                        <option value="swift">Swift</option>
-                    </select>
-                    
-                    <div class="editor-tabs">
-                        <div class="editor-tab active" data-tab="html">
-                            <i class="fab fa-html5" style="color: var(--html);"></i> HTML
-                        </div>
-                        <div class="editor-tab" data-tab="css">
-                            <i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS
-                        </div>
-                        <div class="editor-tab" data-tab="js">
-                            <i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript
-                        </div>
-                        <div class="editor-tab" data-tab="python">
-                            <i class="fab fa-python" style="color: var(--python);"></i> Python
-                        </div>
-                        <div class="editor-tab" data-tab="php">
-                            <i class="fab fa-php" style="color: var(--php);"></i> PHP
-                        </div>
-                    </div>
-                    
-                    <div class="mobile-tabs">
-                        <div class="mobile-tab active" data-tab="html">HTML</div>
-                        <div class="mobile-tab" data-tab="css">CSS</div>
-                        <div class="mobile-tab" data-tab="js">JS</div>
-                        <div class="mobile-tab" data-tab="python">Python</div>
-                        <div class="mobile-tab" data-tab="php">PHP</div>
-                    </div>
-                    
-                    <div class="editor-content">
-                        <div class="code-editor html-editor" style="display: flex;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-html5" style="color: var(--html);"></i> HTML</span>
-                                <div class="theme-selector">
-                                    <label for="theme">Theme:</label>
-                                    <select id="theme">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="monokai">Monokai</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <textarea class="code-area" id="html-code" placeholder="Write your HTML here...">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;SupremeAmer App&lt;/title&gt;
-    &lt;style&gt;
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            text-align: center;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        button {
-            background-color: #4a69bd;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background-color: #3c5aa6;
-            transform: scale(1.05);
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;h1&gt;Welcome to SupremeAmer&lt;/h1&gt;
-        &lt;p&gt;This is a sample application built with our Web IDE&lt;/p&gt;
-        &lt;button onclick="showMessage()"&gt;Click Me!&lt;/button&gt;
-        &lt;div id="output"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</textarea>
-                        </div>
-                        
-                        <div class="code-editor css-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS</span>
-                            </div>
-                            <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
-.container {
-    transition: all 0.3s ease;
-}
+        </div>
 
-#output {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    min-height: 50px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        margin: 20px;
-    }
-    
-    .container {
-        padding: 15px;
-    }
-}</textarea>
-                        </div>
-                        
-                        <div class="code-editor js-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript</span>
-                            </div>
-                            <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
-function showMessage() {
-    const output = document.getElementById('output');
-    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
-    output.style.backgroundColor = '#e8f5e9';
-    
-    // Also log to console
-    console.log('Button clicked! Message displayed.');
-}
-
-// Additional demo function
-function calculate(a, b) {
-    return a + b;
-}
-
-// Display initial message
-console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));</textarea>
-                        </div>
-                        
-                        <div class="code-editor python-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-python" style="color: var(--python);"></i> Python</span>
-                            </div>
-                            <textarea class="code-area" id="python-code" placeholder="Write your Python here..."># Python code example
-def welcome_message():
-    return "Hello from Python in SupremeAmer IDE!"
-
-def calculate(a, b):
-    return a + b
-
-# Main execution
-if __name__ == "__main__":
-    print(welcome_message())
-    print("5 + 3 =", calculate(5, 3))
-    
-    # Demonstrate list comprehension
-    numbers = [1, 2, 3, 4, 5]
-    squares = [x**2 for x in numbers]
-    print("Squares:", squares)</textarea>
-                        </div>
-                        
-                        <div class="code-editor php-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-php" style="color: var(--php);"></i> PHP</span>
-                            </div>
-                            <textarea class="code-area" id="php-code" placeholder="Write your PHP here..."><?php
-// PHP code example
-function welcomeMessage() {
-    return "Hello from PHP in SupremeAmer IDE!";
-}
-
-function calculate($a, $b) {
-    return $a + $b;
-}
-
-// Main execution
-echo welcomeMessage() . "\n";
-echo "5 + 3 = " . calculate(5, 3) . "\n";
-
-// Demonstrate array manipulation
-$numbers = [1, 2, 3, 4, 5];
-$squares = array_map(function($x) { return $x * $x; }, $numbers);
-echo "Squares: " . implode(", ", $squares) . "\n";
-?></textarea>
-                        </div>
-                    </div>
+        <div class="editor-container">
+            <div class="editor-header">
+                <div class="tab active" data-file="index.html">
+                    <i class="fab fa-html5"></i> index.html
                 </div>
-                
-                <div class="resizer-horizontal" id="vertical-resizer"></div>
-                
-                <div class="preview">
+                <div class="tab" data-file="style.css">
+                    <i class="fab fa-css3-alt"></i> style.css
+                </div>
+                <div class="tab" data-file="script.js">
+                    <i class="fab fa-js"></i> script.js
+                </div>
+                <div class="tab" data-file="main.py">
+                    <i class="fab fa-python"></i> main.py
+                </div>
+            </div>
+
+            <div class="editor-content">
+                <div class="editor-panel">
+                    <div id="editor"></div>
+                </div>
+                <div class="preview-panel">
                     <div class="preview-header">
-                        <span><i class="fas fa-play-circle" style="color: var(--success);"></i> Live Preview</span>
-                        <div class="preview-controls">
-                            <button id="refresh-btn">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
-                            <button id="device-toggle">
-                                <i class="fas fa-mobile-alt"></i> Mobile View
+                        <span>Output</span>
+                        <div class="controls">
+                            <button id="console-toggle" class="secondary">
+                                <i class="fas fa-terminal"></i> Toggle Console
                             </button>
                         </div>
                     </div>
-                    <iframe id="preview-frame"></iframe>
+                    <div id="preview"></div>
+                    <div id="console"></div>
                 </div>
             </div>
         </div>
-        
-        <div class="resizer" id="horizontal-resizer"></div>
-        
-        <div class="output-container">
-            <div class="output-header">
-                <span><i class="fas fa-terminal"></i> Console Output</span>
-                <button class="output-clear" id="clear-console">
-                    <i class="fas fa-trash"></i> Clear Console
-                </button>
-            </div>
-            <div id="console-output"></div>
-        </div>
     </div>
-    
-    <footer>
-        <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
-    </footer>
 
-    <div class="modal" id="upload-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Upload Files</h3>
-                <span class="close-modal">&times;</span>
-            </div>
-            <div class="drop-zone" id="modal-drop-zone">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop files or folders here</p>
-                <p>or click to browse</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" id="upload-progress"></div>
-            </div>
-            <p id="upload-status">Ready to upload...</p>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="save-btn" id="start-upload">
-                    <i class="fas fa-upload"></i> Start Upload
-                </button>
-                <button class="reset-btn" id="cancel-upload">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
+    <footer>
+        <div class="status">Ready</div>
+        <div class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i> Dark Mode
         </div>
-    </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const htmlCode = document.getElementById('html-code');
-            const cssCode = document.getElementById('css-code');
-            const jsCode = document.getElementById('js-code');
-            const pythonCode = document.getElementById('python-code');
-            const phpCode = document.getElementById('php-code');
-            const previewFrame = document.getElementById('preview-frame');
-            const consoleOutput = document.getElementById('console-output');
-            const runBtn = document.getElementById('run-btn');
-            const saveBtn = document.getElementById('save-btn');
-            const exportBtn = document.getElementById('export-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const refreshBtn = document.getElementById('refresh-btn');
-            const clearConsoleBtn = document.getElementById('clear-console');
-            const editorTabs = document.querySelectorAll('.editor-tab');
-            const mobileTabs = document.querySelectorAll('.mobile-tab');
-            const languageSelect = document.getElementById('language-select');
-            const codeEditors = document.querySelectorAll('.code-editor');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const closeSidebar = document.getElementById('close-sidebar');
-            const uploadBtn = document.getElementById('upload-btn');
-            const uploadModal = document.getElementById('upload-modal');
-            const closeModal = document.querySelector('.close-modal');
-            const dropZones = document.querySelectorAll('.drop-zone');
-            const fileUpload = document.getElementById('file-upload');
-            const themeToggle = document.getElementById('theme-toggle');
-            const deviceToggle = document.getElementById('device-toggle');
-            const collapsibles = document.querySelectorAll('.collapsible');
-            
-            // Store original console methods
-            const originalConsole = {
-                log: console.log,
-                error: console.error,
-                warn: console.warn,
-                info: console.info
+            // Initialize Ace Editor
+            const editor = ace.edit("editor");
+            editor.setTheme("ace/theme/chrome");
+            editor.session.setMode("ace/mode/html");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                enableSnippets: true,
+                showLineNumbers: true,
+                showGutter: true,
+                showPrintMargin: false,
+                fontSize: "14px",
+                tabSize: 2,
+                useSoftTabs: true
+            });
+
+            // Default content for files
+            const fileContents = {
+                'index.html': `<!DOCTYPE html>
+<html>
+<head>
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to Web IDE</h1>
+    <p>Edit this HTML to see changes in real-time.</p>
+    <button onclick="showMessage()">Click Me</button>
+    <div id="output"></div>
+    <script src="script.js"></script>
+</body>
+</html>`,
+                'style.css': `body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+p {
+    color: #34495e;
+    line-height: 1.6;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}`,
+                'script.js': `function showMessage() {
+    document.getElementById('output').innerHTML = 
+        '<p>Hello from JavaScript! The current time is: ' + new Date().toLocaleTimeString() + '</p>';
+}
+
+console.log('JavaScript file loaded successfully!');`,
+                'main.py': `# Python code example
+def fibonacci(n):
+    """Return the nth Fibonacci number."""
+    if n <= 1:
+        return n
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+
+# Print first 10 Fibonacci numbers
+print("First 10 Fibonacci numbers:")
+for i in range(10):
+    print(f"F({i}) = {fibonacci(i)}")
+
+# Additional example: List comprehension
+squares = [x**2 for x in range(10)]
+print(f"Squares of numbers 0-9: {squares}")`
             };
-            
-            // Override console methods to capture output
-            console.log = function(...args) {
-                originalConsole.log.apply(console, args);
-                logToConsole(args, 'log');
-            };
-            
-            console.error = function(...args) {
-                originalConsole.error.apply(console, args);
-                logToConsole(args, 'error');
-            };
-            
-            console.warn = function(...args) {
-                originalConsole.warn.apply(console, args);
-                logToConsole(args, 'warn');
-            };
-            
-            console.info = function(...args) {
-                originalConsole.info.apply(console, args);
-                logToConsole(args, 'info');
-            };
-            
-            function logToConsole(args, type) {
-                const timestamp = new Date().toLocaleTimeString();
-                const message = args.map(arg => {
-                    if (typeof arg === 'object') {
-                        return JSON.stringify(arg);
-                    }
-                    return arg;
-                }).join(' ');
+
+            // Current file state
+            let currentFile = 'index.html';
+            let isDarkMode = false;
+            let showConsole = false;
+
+            // Initialize editor with default content
+            editor.setValue(fileContents[currentFile], -1);
+
+            // Set up file tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Save current content
+                    fileContents[currentFile] = editor.getValue();
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Update file tree
+                    document.querySelectorAll('.file-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('data-file') === tab.getAttribute('data-file')) {
+                            item.classList.add('active');
+                        }
+                    });
+                    
+                    // Load new file content
+                    currentFile = tab.getAttribute('data-file');
+                    editor.setValue(fileContents[currentFile], -1);
+                    
+                    // Update editor mode
+                    updateEditorMode();
+                });
+            });
+
+            // Set up file tree
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Save current content
+                    fileContents[currentFile] = editor.getValue();
+                    
+                    // Update active file in tree
+                    fileItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Update active tab
+                    tabs.forEach(tab => {
+                        tab.classList.remove('active');
+                        if (tab.getAttribute('data-file') === item.getAttribute('data-file')) {
+                            tab.classList.add('active');
+                        }
+                    });
+                    
+                    // Load new file content
+                    currentFile = item.getAttribute('data-file');
+                    editor.setValue(fileContents[currentFile], -1);
+                    
+                    // Update editor mode
+                    updateEditorMode();
+                });
+            });
+
+            // Update editor mode based on file extension
+            function updateEditorMode() {
+                const extension = currentFile.split('.').pop();
+                let mode = 'text';
                 
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('console-message', `console-${type}`);
+                switch(extension) {
+                    case 'html':
+                        mode = 'html';
+                        break;
+                    case 'css':
+                        mode = 'css';
+                        break;
+                    case 'js':
+                        mode = 'javascript';
+                        break;
+                    case 'py':
+                        mode = 'python';
+                        break;
+                }
                 
-                const timestampElement = document.createElement('span');
-                timestampElement.classList.add('console-timestamp');
-                timestampElement.textContent = `[${timestamp}]`;
-                
-                const contentElement = document.createElement('span');
-                contentElement.textContent = message;
-                
-                messageElement.appendChild(timestampElement);
-                messageElement.appendChild(contentElement);
-                
-                consoleOutput.appendChild(messageElement);
-                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                editor.session.setMode(`ace/mode/${mode}`);
             }
-            
-            function runCode() {
-                const html = htmlCode.value;
-                const css = cssCode.value;
-                const js = jsCode.value;
+
+            // Run code
+            document.getElementById('run-btn').addEventListener('click', executeCode);
+
+            function executeCode() {
+                // Save current content
+                fileContents[currentFile] = editor.getValue();
+                
+                if (currentFile === 'main.py') {
+                    // Execute Python code
+                    runPythonCode();
+                } else {
+                    // Update preview for HTML/CSS/JS
+                    updatePreview();
+                }
+            }
+
+            function updatePreview() {
+                const preview = document.getElementById('preview');
+                const consoleOutput = document.getElementById('console');
+                
+                // Show preview, hide console for frontend code
+                preview.style.display = 'block';
+                consoleOutput.style.display = 'none';
+                showConsole = false;
+                
+                // Create a preview document
+                const previewDocument = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>${fileContents['style.css']}</style>
+                    </head>
+                    <body>
+                        ${fileContents['index.html'].replace('<script src="script.js"></script>', '')}
+                        <script>${fileContents['script.js']}</script>
+                    </body>
+                    </html>
+                `;
+                
+                // Write to iframe or use innerHTML for simple preview
+                preview.innerHTML = '';
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                preview.appendChild(iframe);
+                
+                iframe.contentDocument.open();
+                iframe.contentDocument.write(previewDocument);
+                iframe.contentDocument.close();
+            }
+
+            // Python execution using a simple approach (note: not a real sandbox)
+            function runPythonCode() {
+                const preview = document.getElementById('preview');
+                const consoleOutput = document.getElementById('console');
+                
+                // Hide preview, show console for Python
+                preview.style.display = 'none';
+                consoleOutput.style.display = 'block';
+                showConsole = true;
                 
                 // Clear console
                 consoleOutput.innerHTML = '';
                 
-                const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                // Get Python code
+                const pythonCode = fileContents['main.py'];
                 
-                // Write the code to the iframe
-                previewDocument.open();
-                previewDocument.write(`
-                    ${html}
-                    <style>${css}</style>
-                    <script>
-                        // Override console methods in the iframe
-                        const originalConsole = {
-                            log: console.log,
-                            error: console.error,
-                            warn: console.warn,
-                            info: console.info
-                        };
-                        
-                        console.log = function(...args) {
-                            originalConsole.log.apply(console, args);
-                            window.parent.logToConsole(args, 'log');
-                        };
-                        
-                        console.error = function(...args) {
-                            originalConsole.error.apply(console, args);
-                            window.parent.logToConsole(args, 'error');
-                        };
-                        
-                        console.warn = function(...args) {
-                            originalConsole.warn.apply(console, args);
-                            window.parent.logToConsole(args, 'warn');
-                        };
-                        
-                        console.info = function(...args) {
-                            originalConsole.info.apply(console, args);
-                            window.parent.logToConsole(args, 'info');
-                        };
-                    <\/script>
-                    <script>${js}<\/script>
-                `);
-                previewDocument.close();
+                // Simple Python interpreter using JavaScript (very limited)
+                // This is just a demonstration - a real implementation would need a backend or WebAssembly
+                try {
+                    // This is a mock execution - in a real application, you would use Skulpt or Pyodide
+                    consoleOutput.innerHTML += '>>> Executing Python code...\n';
+                    consoleOutput.innerHTML += '>>> Note: This is a mock execution. For real Python execution, use a backend service or WebAssembly.\n\n';
+                    
+                    // Extract print statements and simulate output
+                    const printRegex = /print\(([^)]+)\)/g;
+                    let match;
+                    while ((match = printRegex.exec(pythonCode)) !== null) {
+                        consoleOutput.innerHTML += `> ${match[1]}\n`;
+                    }
+                    
+                    // Show function definitions
+                    const functionRegex = /def (\w+)/g;
+                    while ((match = functionRegex.exec(pythonCode)) !== null) {
+                        consoleOutput.innerHTML += `> Defined function: ${match[1]}\n`;
+                    }
+                    
+                    consoleOutput.innerHTML += '\n>>> Execution completed.\n';
+                    consoleOutput.innerHTML += '>>> For full Python support, consider integrating with Pyodide or a backend service.\n';
+                } catch (error) {
+                    consoleOutput.innerHTML += `Error: ${error.message}\n`;
+                }
             }
-            
-            // Run code on button click
-            runBtn.addEventListener('click', runCode);
-            refreshBtn.addEventListener('click', runCode);
-            
-            // Save code to localStorage
-            saveBtn.addEventListener('click', function() {
-                localStorage.setItem('supremeamer_html', htmlCode.value);
-                localStorage.setItem('supremeamer_css', cssCode.value);
-                localStorage.setItem('supremeamer_js', jsCode.value);
-                
-                console.log('Code saved successfully!');
+
+            // Clear output
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                if (showConsole) {
+                    document.getElementById('console').innerHTML = '';
+                } else {
+                    document.getElementById('preview').innerHTML = '';
+                }
             });
-            
-            // Export code as HTML file
-            exportBtn.addEventListener('click', function() {
-                const html = htmlCode.value;
-                const css = cssCode.value;
-                const js = jsCode.value;
+
+            // Toggle console
+            document.getElementById('console-toggle').addEventListener('click', function() {
+                const preview = document.getElementById('preview');
+                const consoleOutput = document.getElementById('console');
                 
-                const fullHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SupremeAmer App</title>
-    <style>${css}</style>
-</head>
-<body>
-    ${html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')}
-    <script>${js}<\/script>
-</body>
-</html>`;
+                if (showConsole) {
+                    preview.style.display = 'block';
+                    consoleOutput.style.display = 'none';
+                    showConsole = false;
+                } else {
+                    preview.style.display = 'none';
+                    consoleOutput.style.display = 'block';
+                    showConsole = true;
+                }
+            });
+
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                isDarkMode = !isDarkMode;
                 
-                const blob = new Blob([fullHtml], { type: 'text/html' });
+                if (isDarkMode) {
+                    document.body.classList.add('dark-mode');
+                    editor.setTheme("ace/theme/monokai");
+                    this.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    editor.setTheme("ace/theme/chrome");
+                    this.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                }
+            });
+
+            // Save to localStorage
+            document.getElementById('save-btn').addEventListener('click', function() {
+                // Save all file contents to localStorage
+                localStorage.setItem('webIDEProject', JSON.stringify(fileContents));
+                
+                // Show notification
+                const status = document.querySelector('.status');
+                status.textContent = 'Project saved to localStorage!';
+                
+                setTimeout(() => {
+                    status.textContent = 'Ready';
+                }, 2000);
+            });
+
+            // Download project
+            document.getElementById('download-btn').addEventListener('click', function() {
+                // Create a virtual file system for download
+                const htmlContent = fileContents['index.html'];
+                const cssContent = fileContents['style.css'];
+                const jsContent = fileContents['script.js'];
+                const pyContent = fileContents['main.py'];
+                
+                // Create a blob with all files
+                const projectContent = `WEB IDE PROJECT
+
+HTML (index.html):
+${htmlContent}
+
+CSS (style.css):
+${cssContent}
+
+JavaScript (script.js):
+${jsContent}
+
+Python (main.py):
+${pyContent}
+`;
+                
+                // Create download link
+                const blob = new Blob([projectContent], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
-                
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'supremeamer_app.html';
+                a.download = 'webide-project.txt';
+                document.body.appendChild(a);
                 a.click();
-                
+                document.body.removeChild(a);
                 URL.revokeObjectURL(url);
                 
-                console.log('Code exported as HTML file!');
+                // Show notification
+                const status = document.querySelector('.status');
+                status.textContent = 'Project downloaded!';
+                
+                setTimeout(() => {
+                    status.textContent = 'Ready';
+                }, 2000);
             });
-            
-            // Reset code to default
-            resetBtn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to reset all code? This cannot be undone.')) {
-                    htmlCode.value = `<!DOCTYPE html>
-<html>
-<head>
-    <title>SupremeAmer App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            text-align: center;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        button {
-            background-color: #4a69bd;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background-color: #3c5aa6;
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to SupremeAmer</h1>
-        <p>This is a sample application built with our Web IDE</p>
-        <button onclick="showMessage()">Click Me!</button>
-        <div id="output"></div>
-    </div>
-</body>
-</html>`;
-                    
-                    cssCode.value = `/* Additional CSS styles */
-.container {
-    transition: all 0.3s ease;
-}
 
-#output {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    min-height: 50px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        margin: 20px;
-    }
-    
-    .container {
-        padding: 15px;
-    }
-}`;
+            // Load project from localStorage if available
+            const savedProject = localStorage.getItem('webIDEProject');
+            if (savedProject) {
+                try {
+                    const parsedProject = JSON.parse(savedProject);
+                    Object.assign(fileContents, parsedProject);
                     
-                    jsCode.value = `// JavaScript code
-function showMessage() {
-    const output = document.getElementById('output');
-    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
-    output.style.backgroundColor = '#e8f5e9';
-    
-    // Also log to console
-    console.log('Button clicked! Message displayed.');
-}
-
-// Additional demo function
-function calculate(a, b) {
-    return a + b;
-}
-
-// Display initial message
-console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
+                    // Update editor with saved content
+                    editor.setValue(fileContents[currentFile], -1);
                     
-                    runCode();
-                    console.log('Editor reset to default code!');
-                }
-            });
-            
-            // Clear console
-            clearConsoleBtn.addEventListener('click', function() {
-                consoleOutput.innerHTML = '';
-            });
-            
-            // Tab switching for desktop
-            editorTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
+                    // Show notification
+                    const status = document.querySelector('.status');
+                    status.textContent = 'Project loaded from localStorage!';
                     
-                    // Activate tab
-                    editorTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update mobile tabs
-                    mobileTabs.forEach(t => {
-                        if (t.getAttribute('data-tab') === tabName) {
-                            t.classList.add('active');
-                        } else {
-                            t.classList.remove('active');
-                        }
-                    });
-                    
-                    // Update language select
-                    languageSelect.value = tabName;
-                    
-                    // Show corresponding editor
-                    codeEditors.forEach(editor => {
-                        editor.style.display = 'none';
-                    });
-                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-                });
-            });
-            
-            // Tab switching for mobile tabs
-            mobileTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
-                    
-                    // Activate tab
-                    mobileTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update desktop tabs
-                    editorTabs.forEach(t => {
-                        if (t.getAttribute('data-tab') === tabName) {
-                            t.classList.add('active');
-                        } else {
-                            t.classList.remove('active');
-                        }
-                    });
-                    
-                    // Update language select
-                    languageSelect.value = tabName;
-                    
-                    // Show corresponding editor
-                    codeEditors.forEach(editor => {
-                        editor.style.display = 'none';
-                    });
-                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-                });
-            });
-            
-            // Language select change
-            languageSelect.addEventListener('change', function() {
-                const tabName = this.value;
-                
-                // Activate tab
-                editorTabs.forEach(t => {
-                    if (t.getAttribute('data-tab') === tabName) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-                
-                // Update mobile tabs
-                mobileTabs.forEach(t => {
-                    if (t.getAttribute('data-tab') === tabName) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-                
-                // Show corresponding editor
-                codeEditors.forEach(editor => {
-                    editor.style.display = 'none';
-                });
-                document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-            });
-            
-            // Sidebar toggle
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.add('open');
-            });
-            
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-            });
-            
-            // Upload functionality
-            uploadBtn.addEventListener('click', function() {
-                uploadModal.style.display = 'flex';
-            });
-            
-            closeModal.addEventListener('click', function() {
-                uploadModal.style.display = 'none';
-            });
-            
-            window.addEventListener('click', function(e) {
-                if (e.target === uploadModal) {
-                    uploadModal.style.display = 'none';
-                }
-            });
-            
-            // File upload handling
-            dropZones.forEach(zone => {
-                zone.addEventListener('click', function() {
-                    fileUpload.click();
-                });
-                
-                zone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.style.borderColor = '#4a69bd';
-                    this.style.background = '#f8f9fa';
-                });
-                
-                zone.addEventListener('dragleave', function() {
-                    this.style.borderColor = '#ccc';
-                    this.style.background = '';
-                });
-                
-                zone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.style.borderColor = '#ccc';
-                    this.style.background = '';
-                    
-                    handleFiles(e.dataTransfer.files);
-                });
-            });
-            
-            fileUpload.addEventListener('change', function() {
-                handleFiles(this.files);
-            });
-            
-            function handleFiles(files) {
-                if (files.length > 0) {
-                    console.log(`Processing ${files.length} files...`);
-                    
-                    // Simulate file processing
-                    const progressBar = document.getElementById('upload-progress');
-                    const uploadStatus = document.getElementById('upload-status');
-                    
-                    let progress = 0;
-                    const interval = setInterval(() => {
-                        progress += 5;
-                        progressBar.style.width = `${progress}%`;
-                        
-                        if (progress >= 100) {
-                            clearInterval(interval);
-                            uploadStatus.textContent = 'Upload completed!';
-                            
-                            // Add files to explorer
-                            for (let i = 0; i < Math.min(files.length, 5); i++) {
-                                const file = files[i];
-                                console.log(`Uploaded: ${file.name}`);
-                            }
-                            
-                            // Show success message
-                            setTimeout(() => {
-                                uploadModal.style.display = 'none';
-                                console.log('Files uploaded successfully!');
-                            }, 1000);
-                        }
-                    }, 100);
+                    setTimeout(() => {
+                        status.textContent = 'Ready';
+                    }, 2000);
+                } catch (e) {
+                    console.error('Error loading project from localStorage:', e);
                 }
             }
-            
-            // Theme toggle
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                
-                if (document.body.classList.contains('dark-mode')) {
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
-                } else {
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
-                }
-            });
-            
-            // Device preview toggle
-            deviceToggle.addEventListener('click', function() {
-                const previewFrame = document.getElementById('preview-frame');
-                
-                if (previewFrame.style.width === '375px') {
-                    previewFrame.style.width = '100%';
-                    previewFrame.style.maxWidth = '100%';
-                    deviceToggle.innerHTML = '<i class="fas fa-mobile-alt"></i> Mobile View';
-                } else {
-                    previewFrame.style.width = '375px';
-                    previewFrame.style.maxWidth = '375px';
-                    previewFrame.style.margin = '0 auto';
-                    deviceToggle.innerHTML = '<i class="fas fa-desktop"></i> Desktop View';
-                }
-            });
-            
-            // Collapsible sections
-            collapsibles.forEach(item => {
-                item.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    const content = this.nextElementSibling;
-                    
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                        this.querySelector('i').classList.replace('fa-chevron-up', 'fa-chevron-down');
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        this.querySelector('i').classList.replace('fa-chevron-down', 'fa-chevron-up');
-                    }
-                });
-            });
-            
-            // Load saved code from localStorage
-            if (localStorage.getItem('supremeamer_html')) {
-                htmlCode.value = localStorage.getItem('supremeamer_html');
-                cssCode.value = localStorage.getItem('supremeamer_css');
-                jsCode.value = localStorage.getItem('supremeamer_js');
-                console.log('Previously saved code loaded!');
-            }
-            
-            // Run code on initial load
-            runCode();
-            
-            // Add event listeners for Ctrl+S and Ctrl+Enter to run code
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    runCode();
-                }
-                
-                if (e.key === 'F5') {
-                    e.preventDefault();
-                    runCode();
-                }
-            });
-            
-            // Handle mobile view
-            function handleMobileView() {
-                if (window.innerWidth < 768) {
-                    // Mobile-specific adjustments
-                    document.querySelectorAll('.code-area').forEach(area => {
-                        area.style.fontSize = '16px'; // Prevent zoom on iOS
-                    });
-                }
-            }
-            
-            // Initial call
-            handleMobileView();
-            
-            // Listen for resize events
-            window.addEventListener('resize', handleMobileView);
+
+            // Initialize preview
+            updatePreview();
         });
     </script>
 </body>

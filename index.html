@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SupremeAmer Web IDE Pro</title>
+    <title>SupremeAmer Web IDE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -24,73 +24,55 @@
             --html: #e34c26;
             --css: #264de4;
             --js: #f0db4f;
-            --python: #3776ab;
-            --php: #777bb4;
-            --java: #007396;
-            --ruby: #cc342d;
-            --csharp: #239120;
-            --cpp: #00599c;
-            --swift: #fa7343;
-            --go: #00add8;
-            --rust: #000000;
-            --sidebar-width: 250px;
         }
         
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #333;
             min-height: 100vh;
-            padding: 10px;
+            padding: 20px;
         }
         
         .container {
-            max-width: 1800px;
+            max-width: 1400px;
             margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 98vh;
         }
         
         header {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
-            padding: 12px 15px;
+            padding: 20px;
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
-            gap: 10px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
         
         .logo i {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
         }
         
         .logo h1 {
-            font-size: 1.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            white-space: nowrap;
         }
         
         .controls {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
         
         button {
-            padding: 8px 12px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -98,8 +80,7 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
+            gap: 8px;
         }
         
         .run-btn {
@@ -129,24 +110,6 @@
             background-color: #d15b3f;
         }
         
-        .export-btn {
-            background-color: var(--dark);
-            color: white;
-        }
-        
-        .export-btn:hover {
-            background-color: #1e2223;
-        }
-        
-        .upload-btn {
-            background-color: #8e44ad;
-            color: white;
-        }
-        
-        .upload-btn:hover {
-            background-color: #7d3c98;
-        }
-        
         .template-btn {
             background: linear-gradient(45deg, #ff9f43, #ffd868);
             color: #2d3436;
@@ -156,166 +119,40 @@
             background: linear-gradient(45deg, #ff8c2a, #ffcf52);
         }
         
-        .main-content {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: var(--sidebar-width);
-            background: #f8f9fa;
-            border-right: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        @media (max-width: 992px) {
-            .sidebar {
-                position: absolute;
-                left: -100%;
-                z-index: 100;
-                height: 100%;
-                box-shadow: 3px 0 10px rgba(0,0,0,0.1);
-            }
-            
-            .sidebar.open {
-                left: 0;
-            }
-        }
-        
-        .sidebar-header {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 992px) {
-            .sidebar-toggle {
-                display: block;
-            }
-        }
-        
-        .file-explorer {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        
-        .file-item {
-            padding: 8px 10px;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
-        
-        .file-item:hover {
-            background: #e9ecef;
-        }
-        
-        .file-item.active {
-            background: #dee2e6;
-            font-weight: 600;
-        }
-        
         .editor-container {
-            flex: 1;
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        @media (min-width: 992px) {
-            .editor-container {
-                flex-direction: row;
-            }
-        }
-        
-        .code-editors {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .editor-tabs {
-            display: flex;
-            background-color: var(--light);
+            height: 500px;
             border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .editor-tab {
-            padding: 10px 15px;
-            cursor: pointer;
-            font-weight: 600;
-            border-right: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            font-size: 0.9rem;
-        }
-        
-        .editor-tab.active {
-            background-color: white;
-            border-bottom: 3px solid var(--secondary);
-        }
-        
-        .editor-content {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
         }
         
         .code-editor {
             flex: 1;
+            border-right: 1px solid #ddd;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
         
         .editor-header {
-            padding: 10px 12px;
+            padding: 10px 15px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #ddd;
             font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         
         .editor-header span {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.95rem;
+            gap: 8px;
         }
         
         .code-area {
             flex: 1;
-            padding: 12px;
+            padding: 15px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+            font-size: 16px;
             resize: none;
             border: none;
             outline: none;
@@ -326,39 +163,28 @@
         }
         
         .preview {
-            flex: 2;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            border-top: 1px solid #ddd;
-            overflow: hidden;
-        }
-        
-        @media (min-width: 992px) {
-            .preview {
-                border-top: none;
-                border-left: 1px solid #ddd;
-            }
         }
         
         .preview-header {
-            padding: 10px 12px;
+            padding: 10px 15px;
             background-color: #f8f9fa;
             border-bottom: 1px solid #ddd;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
         }
         
         .preview-controls {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         
         .preview-controls button {
-            padding: 5px 8px;
+            padding: 5px 10px;
             font-size: 0.8rem;
         }
         
@@ -369,58 +195,31 @@
         }
         
         .output-container {
-            height: 150px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
         }
         
         .output-header {
-            padding: 10px 12px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
-            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
             gap: 10px;
-        }
-        
-        .output-clear {
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            color: #2c3e50;
         }
         
         #console-output {
-            background-color: var(--dark);
+            background-color: #2d3436;
             color: #dfe6e9;
-            padding: 10px 12px;
+            padding: 15px;
+            border-radius: 5px;
+            height: 150px;
             overflow-y: auto;
             font-family: 'Courier New', Courier, monospace;
             line-height: 1.5;
-            flex: 1;
-            font-size: 14px;
         }
         
         .console-message {
             margin-bottom: 5px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .console-timestamp {
-            color: #636e72;
-            font-size: 0.75rem;
-            flex-shrink: 0;
         }
         
         .console-error {
@@ -435,157 +234,17 @@
             color: #ffeaa7;
         }
         
-        .console-info {
-            color: #55efc4;
-        }
-        
         footer {
             text-align: center;
-            padding: 12px;
-            color: white;
-            font-size: 0.85rem;
-            background: rgba(0, 0, 0, 0.2);
-            margin-top: 15px;
-            border-radius: 5px;
-        }
-        
-        .resizer {
-            width: 100%;
-            height: 5px;
-            background-color: #ddd;
-            cursor: row-resize;
-            display: none;
-        }
-        
-        @media (min-width: 992px) {
-            .resizer {
-                display: block;
-            }
-        }
-        
-        .resizer-horizontal {
-            width: 5px;
-            height: 100%;
-            background-color: #ddd;
-            cursor: col-resize;
-            display: none;
-        }
-        
-        @media (min-width: 992px) {
-            .resizer-horizontal {
-                display: block;
-            }
-        }
-        
-        .tab-close {
-            margin-left: 5px;
-            cursor: pointer;
-            padding: 2px;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .tab-close:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        .theme-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-        }
-        
-        .theme-selector select {
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            font-size: 0.8rem;
-        }
-        
-        .mobile-tabs {
-            display: flex;
-            overflow-x: auto;
-            gap: 5px;
-            padding: 8px;
-            background: #f1f2f6;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        @media (min-width: 768px) {
-            .mobile-tabs {
-                display: none;
-            }
-        }
-        
-        .mobile-tab {
-            padding: 6px 12px;
-            background: #dfe4ea;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        
-        .mobile-tab.active {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .language-select {
-            display: none;
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background: white;
-            font-weight: 600;
-        }
-        
-        @media (max-width: 767px) {
-            .language-select {
-                display: block;
-            }
-            
-            .editor-tabs {
-                display: none;
-            }
-        }
-        
-        .upload-area {
-            padding: 15px;
-            border-top: 1px solid #ddd;
-        }
-        
-        .drop-zone {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
             padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            border-radius: 5px;
         }
         
-        .drop-zone:hover {
-            border-color: #4a69bd;
-            background: #f8f9fa;
-        }
-        
-        .drop-zone i {
-            font-size: 2rem;
-            color: #4a69bd;
-            margin-bottom: 10px;
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
+        /* Template Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -601,11 +260,11 @@
         
         .modal-content {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 10px;
             width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
+            max-width: 1000px;
+            max-height: 80vh;
             overflow-y: auto;
         }
         
@@ -613,7 +272,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .close-modal {
@@ -621,107 +280,10 @@
             cursor: pointer;
         }
         
-        .progress-bar {
-            height: 20px;
-            background: #f1f2f6;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #00b894, #00a382);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .collapsible {
-            cursor: pointer;
-            padding: 10px;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #e9ecef;
-            border-radius: 4px;
-            margin-bottom: 5px;
-        }
-        
-        .collapsible-content {
-            padding: 0 10px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-        
-        .file-tree {
-            padding-left: 20px;
-        }
-        
-        .dark-mode {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --dark: #121212;
-            --light: #2d3436;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        }
-        
-        .dark-mode .container {
-            background-color: rgba(45, 52, 54, 0.95);
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .sidebar {
-            background: #2d3436;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .file-item:hover {
-            background: #3c4345;
-        }
-        
-        .dark-mode .file-item.active {
-            background: #4a5153;
-        }
-        
-        .dark-mode .code-area {
-            background: #2d3436;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .editor-header,
-        .dark-mode .preview-header,
-        .dark-mode .output-header,
-        .dark-mode .editor-tabs {
-            background: #3c4345;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .editor-tab.active {
-            background: #2d3436;
-        }
-        
-        .dark-mode .mobile-tab {
-            background: #3c4345;
-            color: #f1f2f6;
-        }
-        
-        .dark-mode .mobile-tab.active {
-            background: var(--secondary);
-        }
-        
-        /* Template Gallery Styles */
         .template-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 80vh;
         }
         
         .template-item {
@@ -777,51 +339,16 @@
             background: linear-gradient(45deg, #009d7a, #008f6c);
         }
         
-        .search-box {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        
-        .category-filter {
-            padding: 10px 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .category-btn {
-            padding: 5px 10px;
-            background: #f1f2f6;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        
-        .category-btn.active {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .template-modal {
-            max-width: 1200px;
-        }
-        
-        .install-btn {
-            background: linear-gradient(45deg, #e17055, #e15f55);
-            color: white;
-        }
-        
-        .install-btn:hover {
-            background: linear-gradient(45deg, #d15b3f, #d14a3f);
+        @media (max-width: 900px) {
+            .editor-container {
+                flex-direction: column;
+                height: 800px;
+            }
+            
+            .code-editor {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
         }
     </style>
 </head>
@@ -830,169 +357,30 @@
         <header>
             <div class="logo">
                 <i class="fas fa-code"></i>
-                <h1>SupremeAmer IDE Pro</h1>
+                <h1>SupremeAmer Web IDE</h1>
             </div>
             <div class="controls">
-                <button class="sidebar-toggle" id="sidebar-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
                 <button class="run-btn" id="run-btn">
-                    <i class="fas fa-play"></i> Run
+                    <i class="fas fa-play"></i> Run Code
                 </button>
                 <button class="save-btn" id="save-btn">
                     <i class="fas fa-save"></i> Save
                 </button>
-                <button class="upload-btn" id="upload-btn">
-                    <i class="fas fa-upload"></i> Upload
-                </button>
                 <button class="template-btn" id="template-btn">
                     <i class="fas fa-palette"></i> Templates
-                </button>
-                <button class="export-btn" id="export-btn">
-                    <i class="fas fa-download"></i> Export
                 </button>
                 <button class="reset-btn" id="reset-btn">
                     <i class="fas fa-redo"></i> Reset
                 </button>
-                <button class="theme-toggle" id="theme-toggle">
-                    <i class="fas fa-moon"></i> Dark
-                </button>
-                <button class="install-btn" id="install-btn">
-                    <i class="fas fa-download"></i> Install App
-                </button>
             </div>
         </header>
         
-        <div class="main-content">
-            <div class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <h3>File Explorer</h3>
-                    <button class="sidebar-toggle" id="close-sidebar">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <div class="editor-container">
+            <div class="code-editor">
+                <div class="editor-header">
+                    <span><i class="fas fa-html5" style="color: var(--html);"></i> HTML</span>
                 </div>
-                
-                <div class="file-explorer">
-                    <div class="collapsible">
-                        <span>Project Files</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="collapsible-content">
-                        <div class="file-tree">
-                            <div class="file-item active">
-                                <i class="fab fa-html5" style="color: var(--html);"></i>
-                                index.html
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-css3-alt" style="color: var(--css);"></i>
-                                style.css
-                            </div>
-                            <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                script.js
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                assets
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                components
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="collapsible">
-                        <span>Templates</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="collapsible-content">
-                        <div class="file-tree">
-                            <div class="file-item">
-                                <i class="fas fa-building" style="color: #3498db;"></i>
-                                Business
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-store" style="color: #9b59b6;"></i>
-                                E-commerce
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-utensils" style="color: #e74c3c;"></i>
-                                Restaurant
-                            </div>
-                            <div class="file-item">
-                                <i class="fas fa-briefcase" style="color: #f39c12;"></i>
-                                Portfolio
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="upload-area">
-                    <label for="file-upload" class="drop-zone" id="drop-zone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop files or folders here</p>
-                        <p>or click to browse</p>
-                    </label>
-                    <input type="file" id="file-upload" class="file-input" multiple webkitdirectory>
-                </div>
-            </div>
-            
-            <div class="editor-container">
-                <div class="code-editors">
-                    <select class="language-select" id="language-select">
-                        <option value="html">HTML</option>
-                        <option value="css">CSS</option>
-                        <option value="js">JavaScript</option>
-                        <option value="python">Python</option>
-                        <option value="php">PHP</option>
-                        <option value="java">Java</option>
-                        <option value="ruby">Ruby</option>
-                        <option value="csharp">C#</option>
-                        <option value="cpp">C++</option>
-                        <option value="swift">Swift</option>
-                    </select>
-                    
-                    <div class="editor-tabs">
-                        <div class="editor-tab active" data-tab="html">
-                            <i class="fab fa-html5" style="color: var(--html);"></i> HTML
-                        </div>
-                        <div class="editor-tab" data-tab="css">
-                            <i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS
-                        </div>
-                        <div class="editor-tab" data-tab="js">
-                            <i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript
-                        </div>
-                        <div class="editor-tab" data-tab="python">
-                            <i class="fab fa-python" style="color: var(--python);"></i> Python
-                        </div>
-                        <div class="editor-tab" data-tab="php">
-                            <i class="fab fa-php" style="color: var(--php);"></i> PHP
-                        </div>
-                    </div>
-                    
-                    <div class="mobile-tabs">
-                        <div class="mobile-tab active" data-tab="html">HTML</div>
-                        <div class="mobile-tab" data-tab="css">CSS</div>
-                        <div class="mobile-tab" data-tab="js">JS</div>
-                        <div class="mobile-tab" data-tab="python">Python</div>
-                        <div class="mobile-tab" data-tab="php">PHP</div>
-                    </div>
-                    
-                    <div class="editor-content">
-                        <div class="code-editor html-editor" style="display: flex;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-html5" style="color: var(--html);"></i> HTML</span>
-                                <div class="theme-selector">
-                                    <label for="theme">Theme:</label>
-                                    <select id="theme">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="monokai">Monokai</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <textarea class="code-area" id="html-code" placeholder="Write your HTML here...">&lt;!DOCTYPE html&gt;
+                <textarea class="code-area" id="html-code" placeholder="Write your HTML here...">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
     &lt;title&gt;SupremeAmer App&lt;/title&gt;
@@ -1022,11 +410,6 @@
             border-radius: 4px;
             cursor: pointer;
             margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background-color: #3c5aa6;
-            transform: scale(1.05);
         }
     &lt;/style&gt;
 &lt;/head&gt;
@@ -1039,13 +422,18 @@
     &lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;</textarea>
-                        </div>
-                        
-                        <div class="code-editor css-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS</span>
-                            </div>
-                            <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
+            </div>
+            
+            <div class="code-editor">
+                <div class="editor-header">
+                    <span><i class="fas fa-css3-alt" style="color: var(--css);"></i> CSS</span>
+                </div>
+                <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
+button:hover {
+    background-color: #3c5aa6;
+    transform: scale(1.05);
+}
+
 .container {
     transition: all 0.3s ease;
 }
@@ -1056,29 +444,17 @@
     border-radius: 5px;
     background-color: #f8f9fa;
     min-height: 50px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        margin: 20px;
-    }
-    
-    .container {
-        padding: 15px;
-    }
 }</textarea>
-                        </div>
-                        
-                        <div class="code-editor js-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript</span>
-                            </div>
-                            <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
+            </div>
+            
+            <div class="code-editor">
+                <div class="editor-header">
+                    <span><i class="fas fa-code" style="color: var(--js);"></i> JavaScript</span>
+                </div>
+                <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
 function showMessage() {
     const output = document.getElementById('output');
     output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
-    output.style.backgroundColor = '#e8f5e9';
     
     // Also log to console
     console.log('Button clicked! Message displayed.');
@@ -1089,87 +465,27 @@ function calculate(a, b) {
     return a + b;
 }
 
-// Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
 console.log('Sample calculation: 5 + 3 =', calculate(5, 3));</textarea>
-                        </div>
-                        
-                        <div class="code-editor python-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-python" style="color: var(--python);"></i> Python</span>
-                            </div>
-                            <textarea class="code-area" id="python-code" placeholder="Write your Python here..."># Python code example
-def welcome_message():
-    return "Hello from Python in SupremeAmer IDE!"
-
-def calculate(a, b):
-    return a + b
-
-# Main execution
-if __name__ == "__main__":
-    print(welcome_message())
-    print("5 + 3 =", calculate(5, 3))
-    
-    # Demonstrate list comprehension
-    numbers = [1, 2, 3, 4, 5]
-    squares = [x**2 for x in numbers]
-    print("Squares:", squares)</textarea>
-                        </div>
-                        
-                        <div class="code-editor php-editor" style="display: none;">
-                            <div class="editor-header">
-                                <span><i class="fab fa-php" style="color: var(--php);"></i> PHP</span>
-                            </div>
-                            <textarea class="code-area" id="php-code" placeholder="Write your PHP here..."><?php
-// PHP code example
-function welcomeMessage() {
-    return "Hello from PHP in SupremeAmer IDE!";
-}
-
-function calculate($a, $b) {
-    return $a + $b;
-}
-
-// Main execution
-echo welcomeMessage() . "\n";
-echo "5 + 3 = " . calculate(5, 3) . "\n";
-
-// Demonstrate array manipulation
-$numbers = [1, 2, 3, 4, 5];
-$squares = array_map(function($x) { return $x * $x; }, $numbers);
-echo "Squares: " . implode(", ", $squares) . "\n";
-?></textarea>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="resizer-horizontal" id="vertical-resizer"></div>
-                
-                <div class="preview">
-                    <div class="preview-header">
-                        <span><i class="fas fa-play-circle" style="color: var(--success);"></i> Live Preview</span>
-                        <div class="preview-controls">
-                            <button id="refresh-btn">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
-                            <button id="device-toggle">
-                                <i class="fas fa-mobile-alt"></i> Mobile View
-                            </button>
-                        </div>
-                    </div>
-                    <iframe id="preview-frame"></iframe>
-                </div>
             </div>
         </div>
         
-        <div class="resizer" id="horizontal-resizer"></div>
+        <div class="preview">
+            <div class="preview-header">
+                <span><i class="fas fa-play-circle" style="color: var(--success);"></i> Live Preview</span>
+                <div class="preview-controls">
+                    <button id="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <iframe id="preview-frame"></iframe>
+        </div>
         
         <div class="output-container">
             <div class="output-header">
-                <span><i class="fas fa-terminal"></i> Console Output</span>
-                <button class="output-clear" id="clear-console">
-                    <i class="fas fa-trash"></i> Clear Console
-                </button>
+                <i class="fas fa-terminal"></i>
+                <span>Console Output</span>
             </div>
             <div id="console-output"></div>
         </div>
@@ -1179,273 +495,171 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
     </footer>
 
-    <!-- Upload Modal -->
-    <div class="modal" id="upload-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Upload Files</h3>
-                <span class="close-modal">&times;</span>
-            </div>
-            <div class="drop-zone" id="modal-drop-zone">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop files or folders here</p>
-                <p>or click to browse</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" id="upload-progress"></div>
-            </div>
-            <p id="upload-status">Ready to upload...</p>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="save-btn" id="start-upload">
-                    <i class="fas fa-upload"></i> Start Upload
-                </button>
-                <button class="reset-btn" id="cancel-upload">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Templates Modal -->
     <div class="modal" id="templates-modal">
-        <div class="modal-content template-modal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3>Choose a Template</h3>
-                <span class="close-modal">&times;</span>
+                <h2>Website Templates</h2>
+                <span class="close-modal" id="close-modal">&times;</span>
             </div>
             
-            <div class="search-box">
-                <input type="text" id="template-search" placeholder="Search templates...">
-            </div>
-            
-            <div class="category-filter">
-                <button class="category-btn active">All</button>
-                <button class="category-btn">Business</button>
-                <button class="category-btn">E-commerce</button>
-                <button class="category-btn">Portfolio</button>
-                <button class="category-btn">Blog</button>
-                <button class="category-btn">Education</button>
-            </div>
-            
-            <div class="template-gallery" id="template-gallery">
-                <!-- Templates will be dynamically added here -->
+            <div class="template-gallery">
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>Corporate Business</h3>
+                        <p>Professional website for corporate businesses</p>
+                        <button class="use-template-btn" data-template="business">Use This Template</button>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>E-Commerce Store</h3>
+                        <p>Fully functional online store template</p>
+                        <button class="use-template-btn" data-template="ecommerce">Use This Template</button>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>Restaurant</h3>
+                        <p>Appetizing website for restaurants and cafes</p>
+                        <button class="use-template-btn" data-template="restaurant">Use This Template</button>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>Portfolio</h3>
+                        <p>Showcase your creative work with this portfolio</p>
+                        <button class="use-template-btn" data-template="portfolio">Use This Template</button>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>News Blog</h3>
+                        <p>Clean and modern blog template</p>
+                        <button class="use-template-btn" data-template="blog">Use This Template</button>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-image">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="template-info">
+                        <h3>Education</h3>
+                        <p>Online learning and course platform template</p>
+                        <button class="use-template-btn" data-template="education">Use This Template</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Template data with 20+ templates
-        const templateData = [
-            { 
-                id: 1, 
-                name: "Corporate Business", 
-                category: "Business", 
-                description: "Professional website for corporate businesses",
-                html: "templates/business.html",
-                css: "templates/business.css",
-                js: "templates/business.js"
-            },
-            { 
-                id: 2, 
-                name: "Personal Blog", 
-                category: "Blog", 
-                description: "Clean and modern personal blogging platform",
-                html: "templates/blog.html",
-                css: "templates/blog.css",
-                js: "templates/blog.js"
-            },
-            { 
-                id: 3, 
-                name: "Travel Agency", 
-                category: "Business", 
-                description: "Beautiful travel agency website with booking capabilities",
-                html: "templates/travel.html",
-                css: "templates/travel.css",
-                js: "templates/travel.js"
-            },
-            { 
-                id: 4, 
-                name: "Online Store", 
-                category: "E-commerce", 
-                description: "Fully functional e-commerce store template",
-                html: "templates/ecommerce.html",
-                css: "templates/ecommerce.css",
-                js: "templates/ecommerce.js"
-            },
-            { 
-                id: 5, 
-                name: "Design Portfolio", 
-                category: "Portfolio", 
-                description: "Showcase your creative work with this portfolio",
-                html: "templates/portfolio.html",
-                css: "templates/portfolio.css",
-                js: "templates/portfolio.js"
-            },
-            { 
-                id: 6, 
-                name: "Restaurant", 
-                category: "Business", 
-                description: "Appetizing website for restaurants and cafes",
-                html: "templates/restaurant.html",
-                css: "templates/restaurant.css",
-                js: "templates/restaurant.js"
-            },
-            { 
-                id: 7, 
-                name: "Real Estate", 
-                category: "Business", 
-                description: "List properties with this real estate template",
-                html: "templates/realestate.html",
-                css: "templates/realestate.css",
-                js: "templates/realestate.js"
-            },
-            { 
-                id: 8, 
-                name: "Education Platform", 
-                category: "Education", 
-                description: "Online learning and course platform template",
-                html: "templates/education.html",
-                css: "templates/education.css",
-                js: "templates/education.js"
-            },
-            { 
-                id: 9, 
-                name: "Medical Clinic", 
-                category: "Business", 
-                description: "Professional website for medical practices",
-                html: "templates/medical.html",
-                css: "templates/medical.css",
-                js: "templates/medical.js"
-            },
-            { 
-                id: 10, 
-                name: "Tech Startup", 
-                category: "Business", 
-                description: "Modern website for technology startups",
-                html: "templates/startup.html",
-                css: "templates/startup.css",
-                js: "templates/startup.js"
-            },
-            { 
-                id: 11, 
-                name: "Music Band", 
-                category: "Entertainment", 
-                description: "Website for bands and musicians",
-                html: "templates/music.html",
-                css: "templates/music.css",
-                js: "templates/music.js"
-            },
-            { 
-                id: 12, 
-                name: "Event Management", 
-                category: "Business", 
-                description: "Plan and promote events with this template",
-                html: "templates/event.html",
-                css: "templates/event.css",
-                js: "templates/event.js"
-            },
-            { 
-                id: 13, 
-                name: "Wedding Planner", 
-                category: "Business", 
-                description: "Elegant website for wedding planning services",
-                html: "templates/wedding.html",
-                css: "templates/wedding.css",
-                js: "templates/wedding.js"
-            },
-            { 
-                id: 14, 
-                name: "Fitness Center", 
-                category: "Business", 
-                description: "Website for gyms and fitness centers",
-                html: "templates/fitness.html",
-                css: "templates/fitness.css",
-                js: "templates/fitness.js"
-            },
-            { 
-                id: 15, 
-                name: "Charity Organization", 
-                category: "Non-profit", 
-                description: "Website for non-profit organizations",
-                html: "templates/charity.html",
-                css: "templates/charity.css",
-                js: "templates/charity.js"
-            },
-            { 
-                id: 16, 
-                name: "Photography Portfolio", 
-                category: "Portfolio", 
-                description: "Showcase your photography with this elegant template",
-                html: "templates/photography.html",
-                css: "templates/photography.css",
-                js: "templates/photography.js"
-            },
-            { 
-                id: 17, 
-                name: "Law Firm", 
-                category: "Business", 
-                description: "Professional website for legal practices",
-                html: "templates/law.html",
-                css: "templates/law.css",
-                js: "templates/law.js"
-            },
-            { 
-                id: 18, 
-                name: "Coffee Shop", 
-                category: "Business", 
-                description: "Warm and inviting website for coffee shops",
-                html: "templates/coffee.html",
-                css: "templates/coffee.css",
-                js: "templates/coffee.js"
-            },
-            { 
-                id: 19, 
-                name: "Fashion Store", 
-                category: "E-commerce", 
-                description: "Stylish website for fashion retailers",
-                html: "templates/fashion.html",
-                css: "templates/fashion.css",
-                js: "templates/fashion.js"
-            },
-            { 
-                id: 20, 
-                name: "Consulting Agency", 
-                category: "Business", 
-                description: "Professional website for consulting services",
-                html: "templates/consulting.html",
-                css: "templates/consulting.css",
-                js: "templates/consulting.js"
-            },
-            { 
-                id: 21, 
-                name: "Hotel Website", 
-                category: "Business", 
-                description: "Booking website for hotels and accommodations",
-                html: "templates/hotel.html",
-                css: "templates/hotel.css",
-                js: "templates/hotel.js"
-            },
-            { 
-                id: 22, 
-                name: "Art Gallery", 
-                category: "Portfolio", 
-                description: "Showcase artwork with this elegant template",
-                html: "templates/art.html",
-                css: "templates/art.css",
-                js: "templates/art.js"
-            }
-        ];
-
-        // Sample template content for demonstration
-        // In a real implementation, these would be separate files
-        const templateFiles = {
-            "business.html": `<!DOCTYPE html>
-<html lang="en">
+        document.addEventListener('DOMContentLoaded', function() {
+            const htmlCode = document.getElementById('html-code');
+            const cssCode = document.getElementById('css-code');
+            const jsCode = document.getElementById('js-code');
+            const previewFrame = document.getElementById('preview-frame');
+            const consoleOutput = document.getElementById('console-output');
+            const runBtn = document.getElementById('run-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const templateBtn = document.getElementById('template-btn');
+            const templatesModal = document.getElementById('templates-modal');
+            const closeModal = document.getElementById('close-modal');
+            const useTemplateBtns = document.querySelectorAll('.use-template-btn');
+            
+            // Template definitions
+            const templates = {
+                business: {
+                    html: `<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Template</title>
-    <link rel="stylesheet" href="business.css">
+    <title>Business Solutions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: linear-gradient(90deg, #2c3e50, #4a69bd);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .hero {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 40px 0;
+            text-align: center;
+        }
+        .btn {
+            background: #4a69bd;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .features {
+            padding: 60px 0;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+            background: #2d3436;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -1463,7 +677,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         </div>
         
         <div class="features">
-            <h2>Our Services</h2>
+            <h2 style="text-align: center;">Our Services</h2>
             <div class="feature-grid">
                 <div class="feature-card">
                     <h3>Consulting</h3>
@@ -1486,280 +700,195 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             <p>&copy; 2023 Business Solutions. All rights reserved.</p>
         </div>
     </footer>
-    <script src="business.js"></script>
 </body>
 </html>`,
-
-            "business.css": `body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-header {
-    background: linear-gradient(90deg, #2c3e50, #4a69bd);
-    color: white;
-    padding: 40px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-}
-
-header p {
-    margin: 10px 0 0;
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
-
-.hero {
-    background: white;
-    padding: 60px 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin: 40px 0;
-    text-align: center;
-}
-
-.hero h2 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-    color: #666;
-}
-
-.btn {
-    display: inline-block;
-    background: #4a69bd;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.btn:hover {
-    background: #3c5aa6;
-    transform: translateY(-2px);
-}
-
-.features {
-    padding: 60px 0;
-}
-
-.features h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 40px;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.feature-card {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-    text-align: center;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-card h3 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-}
-
-.feature-card p {
-    color: #666;
-}
-
-footer {
-    text-align: center;
-    padding: 40px;
-    margin-top: 60px;
-    background: #2d3436;
-    color: white;
-}
-
-@media (max-width: 768px) {
-    header {
-        padding: 30px 0;
-    }
+                    css: "",
+                    js: ""
+                },
+                ecommerce: {
+                    html: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .product-image {
+            height: 200px;
+            background: #f1f2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-info {
+            padding: 20px;
+        }
+        .btn {
+            background: #00b894;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Our Online Store</h1>
+        </div>
+    </header>
     
-    header h1 {
-        font-size: 2rem;
-    }
+    <div class="container">
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <p>Product Image</p>
+                </div>
+                <div class="product-info">
+                    <h3>Product Name</h3>
+                    <p>$29.99</p>
+                    <button class="btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <p>Product Image</p>
+                </div>
+                <div class="product-info">
+                    <h3>Product Name</h3>
+                    <p>$39.99</p>
+                    <button class="btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <p>Product Image</p>
+                </div>
+                <div class="product-info">
+                    <h3>Product Name</h3>
+                    <p>$49.99</p>
+                    <button class="btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`,
+                    css: "",
+                    js: ""
+                },
+                restaurant: {
+                    html: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff9f9;
+        }
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudHxlbnwwfHwwfHw%3D&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .menu {
+            padding: 60px 20px;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .btn {
+            background: #e17055;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Gourmet Restaurant</h1>
+        <p>Experience the finest cuisine in town</p>
+        <button class="btn">Reserve a Table</button>
+    </div>
     
-    .hero {
-        padding: 40px 20px;
-    }
-    
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
-}`,
-
-            "business.js": `console.log('Business template loaded successfully!');
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize animations or other functionality
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Thank you for your interest in our business solutions!');
-        });
-    });
-    
-    // Animate feature cards on scroll
-    const featureCards = document.querySelectorAll('.feature-card');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = 1;
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    featureCards.forEach(card => {
-        card.style.opacity = 0;
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(card);
-    });
-});`
-        };
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const htmlCode = document.getElementById('html-code');
-            const cssCode = document.getElementById('css-code');
-            const jsCode = document.getElementById('js-code');
-            const pythonCode = document.getElementById('python-code');
-            const phpCode = document.getElementById('php-code');
-            const previewFrame = document.getElementById('preview-frame');
-            const consoleOutput = document.getElementById('console-output');
-            const runBtn = document.getElementById('run-btn');
-            const saveBtn = document.getElementById('save-btn');
-            const exportBtn = document.getElementById('export-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const refreshBtn = document.getElementById('refresh-btn');
-            const clearConsoleBtn = document.getElementById('clear-console');
-            const editorTabs = document.querySelectorAll('.editor-tab');
-            const mobileTabs = document.querySelectorAll('.mobile-tab');
-            const languageSelect = document.getElementById('language-select');
-            const codeEditors = document.querySelectorAll('.code-editor');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const closeSidebar = document.getElementById('close-sidebar');
-            const uploadBtn = document.getElementById('upload-btn');
-            const uploadModal = document.getElementById('upload-modal');
-            const templateBtn = document.getElementById('template-btn');
-            const templatesModal = document.getElementById('templates-modal');
-            const closeModals = document.querySelectorAll('.close-modal');
-            const dropZones = document.querySelectorAll('.drop-zone');
-            const fileUpload = document.getElementById('file-upload');
-            const themeToggle = document.getElementById('theme-toggle');
-            const deviceToggle = document.getElementById('device-toggle');
-            const collapsibles = document.querySelectorAll('.collapsible');
-            const installBtn = document.getElementById('install-btn');
-            const templateGallery = document.getElementById('template-gallery');
-            const templateSearch = document.getElementById('template-search');
-            const categoryBtns = document.querySelectorAll('.category-btn');
-            
-            // Populate template gallery
-            function populateTemplates() {
-                templateGallery.innerHTML = '';
-                
-                templateData.forEach(template => {
-                    const templateEl = document.createElement('div');
-                    templateEl.className = 'template-item';
-                    templateEl.innerHTML = `
-                        <div class="template-image">
-                            <i class="fas fa-image"></i>
-                        </div>
-                        <div class="template-info">
-                            <h3>${template.name}</h3>
-                            <p>${template.description}</p>
-                            <button class="use-template-btn" data-id="${template.id}">
-                                Use This Template
-                            </button>
-                        </div>
-                    `;
-                    templateGallery.appendChild(templateEl);
-                });
-                
-                // Add event listeners to template buttons
-                document.querySelectorAll('.use-template-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const templateId = this.getAttribute('data-id');
-                        loadTemplate(templateId);
-                        templatesModal.style.display = 'none';
-                    });
-                });
-            }
-            
-            // Load template into editor
-            async function loadTemplate(id) {
-                const template = templateData.find(t => t.id == id);
-                if (!template) return;
-                
-                try {
-                    // In a real implementation, you would fetch these from external files
-                    // For this example, we're using the templateFiles object
-                    
-                    // Set HTML content
-                    htmlCode.value = templateFiles['business.html'];
-                    
-                    // Set CSS content
-                    cssCode.value = templateFiles['business.css'];
-                    
-                    // Set JS content
-                    jsCode.value = templateFiles['business.js'];
-                    
-                    // Run the code to show preview
-                    runCode();
-                    
-                    // Notify user
-                    console.log(`"${template.name}" template loaded!`);
-                } catch (error) {
-                    console.error('Error loading template:', error);
+    <div class="menu">
+        <h2 style="text-align: center;">Our Menu</h2>
+        <div class="menu-item">
+            <div>
+                <h3>Grilled Salmon</h3>
+                <p>Fresh salmon with herbs and lemon butter sauce</p>
+            </div>
+            <p>$24.99</p>
+        </div>
+        <div class="menu-item">
+            <div>
+                <h3>Beef Tenderloin</h3>
+                <p>Premium beef with roasted vegetables</p>
+            </div>
+            <p>$29.99</p>
+        </div>
+        <div class="menu-item">
+            <div>
+                <h3>Vegetable Pasta</h3>
+                <p>Fresh pasta with seasonal vegetables</p>
+            </div>
+            <p>$18.99</p>
+        </div>
+    </div>
+</body>
+</html>`,
+                    css: "",
+                    js: ""
                 }
-            }
-            
+            };
+
             // Store original console methods
             const originalConsole = {
                 log: console.log,
                 error: console.error,
-                warn: console.warn,
-                info: console.info
+                warn: console.warn
             };
             
             // Override console methods to capture output
@@ -1778,13 +907,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 logToConsole(args, 'warn');
             };
             
-            console.info = function(...args) {
-                originalConsole.info.apply(console, args);
-                logToConsole(args, 'info');
-            };
-            
             function logToConsole(args, type) {
-                const timestamp = new Date().toLocaleTimeString();
                 const message = args.map(arg => {
                     if (typeof arg === 'object') {
                         return JSON.stringify(arg);
@@ -1794,16 +917,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('console-message', `console-${type}`);
-                
-                const timestampElement = document.createElement('span');
-                timestampElement.classList.add('console-timestamp');
-                timestampElement.textContent = `[${timestamp}]`;
-                
-                const contentElement = document.createElement('span');
-                contentElement.textContent = message;
-                
-                messageElement.appendChild(timestampElement);
-                messageElement.appendChild(contentElement);
+                messageElement.textContent = message;
                 
                 consoleOutput.appendChild(messageElement);
                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
@@ -1829,8 +943,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const originalConsole = {
                             log: console.log,
                             error: console.error,
-                            warn: console.warn,
-                            info: console.info
+                            warn: console.warn
                         };
                         
                         console.log = function(...args) {
@@ -1846,11 +959,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.warn = function(...args) {
                             originalConsole.warn.apply(console, args);
                             window.parent.logToConsole(args, 'warn');
-                        };
-                        
-                        console.info = function(...args) {
-                            originalConsole.info.apply(console, args);
-                            window.parent.logToConsole(args, 'info');
                         };
                     <\/script>
                     <script>${js}<\/script>
@@ -1869,38 +977,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('supremeamer_js', jsCode.value);
                 
                 console.log('Code saved successfully!');
-            });
-            
-            // Export code as HTML file
-            exportBtn.addEventListener('click', function() {
-                const html = htmlCode.value;
-                const css = cssCode.value;
-                const js = jsCode.value;
-                
-                const fullHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SupremeAmer App</title>
-    <style>${css}</style>
-</head>
-<body>
-    ${html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')}
-    <script>${js}<\/script>
-</body>
-</html>`;
-                
-                const blob = new Blob([fullHtml], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'supremeamer_app.html';
-                a.click();
-                
-                URL.revokeObjectURL(url);
-                
-                console.log('Code exported as HTML file!');
             });
             
             // Reset code to default
@@ -1936,11 +1012,6 @@ document.addEventListener('DOMContentLoaded', function() {
             border-radius: 4px;
             cursor: pointer;
             margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background-color: #3c5aa6;
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -1955,6 +1026,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </html>`;
                     
                     cssCode.value = `/* Additional CSS styles */
+button:hover {
+    background-color: #3c5aa6;
+    transform: scale(1.05);
+}
+
 .container {
     transition: all 0.3s ease;
 }
@@ -1965,24 +1041,12 @@ document.addEventListener('DOMContentLoaded', function() {
     border-radius: 5px;
     background-color: #f8f9fa;
     min-height: 50px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        margin: 20px;
-    }
-    
-    .container {
-        padding: 15px;
-    }
 }`;
                     
                     jsCode.value = `// JavaScript code
 function showMessage() {
     const output = document.getElementById('output');
     output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
-    output.style.backgroundColor = '#e8f5e9';
     
     // Also log to console
     console.log('Button clicked! Message displayed.');
@@ -1993,7 +1057,6 @@ function calculate(a, b) {
     return a + b;
 }
 
-// Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
 console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     
@@ -2002,262 +1065,36 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 }
             });
             
-            // Clear console
-            clearConsoleBtn.addEventListener('click', function() {
-                consoleOutput.innerHTML = '';
-            });
-            
-            // Tab switching for desktop
-            editorTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
-                    
-                    // Activate tab
-                    editorTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update mobile tabs
-                    mobileTabs.forEach(t => {
-                        if (t.getAttribute('data-tab') === tabName) {
-                            t.classList.add('active');
-                        } else {
-                            t.classList.remove('active');
-                        }
-                    });
-                    
-                    // Update language select
-                    languageSelect.value = tabName;
-                    
-                    // Show corresponding editor
-                    codeEditors.forEach(editor => {
-                        editor.style.display = 'none';
-                    });
-                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-                });
-            });
-            
-            // Tab switching for mobile tabs
-            mobileTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
-                    
-                    // Activate tab
-                    mobileTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update desktop tabs
-                    editorTabs.forEach(t => {
-                        if (t.getAttribute('data-tab') === tabName) {
-                            t.classList.add('active');
-                        } else {
-                            t.classList.remove('active');
-                        }
-                    });
-                    
-                    // Update language select
-                    languageSelect.value = tabName;
-                    
-                    // Show corresponding editor
-                    codeEditors.forEach(editor => {
-                        editor.style.display = 'none';
-                    });
-                    document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-                });
-            });
-            
-            // Language select change
-            languageSelect.addEventListener('change', function() {
-                const tabName = this.value;
-                
-                // Activate tab
-                editorTabs.forEach(t => {
-                    if (t.getAttribute('data-tab') === tabName) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-                
-                // Update mobile tabs
-                mobileTabs.forEach(t => {
-                    if (t.getAttribute('data-tab') === tabName) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-                
-                // Show corresponding editor
-                codeEditors.forEach(editor => {
-                    editor.style.display = 'none';
-                });
-                document.querySelector(`.${tabName}-editor`).style.display = 'flex';
-            });
-            
-            // Sidebar toggle
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.add('open');
-            });
-            
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-            });
-            
-            // Upload functionality
-            uploadBtn.addEventListener('click', function() {
-                uploadModal.style.display = 'flex';
-            });
-            
             // Template functionality
             templateBtn.addEventListener('click', function() {
                 templatesModal.style.display = 'flex';
-                populateTemplates();
             });
             
-            // Close modals
-            closeModals.forEach(closeBtn => {
-                closeBtn.addEventListener('click', function() {
-                    uploadModal.style.display = 'none';
-                    templatesModal.style.display = 'none';
-                });
+            closeModal.addEventListener('click', function() {
+                templatesModal.style.display = 'none';
             });
             
             window.addEventListener('click', function(e) {
-                if (e.target === uploadModal || e.target === templatesModal) {
-                    uploadModal.style.display = 'none';
+                if (e.target === templatesModal) {
                     templatesModal.style.display = 'none';
                 }
             });
             
-            // File upload handling
-            dropZones.forEach(zone => {
-                zone.addEventListener('click', function() {
-                    fileUpload.click();
-                });
-                
-                zone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.style.borderColor = '#4a69bd';
-                    this.style.background = '#f8f9fa';
-                });
-                
-                zone.addEventListener('dragleave', function() {
-                    this.style.borderColor = '#ccc';
-                    this.style.background = '';
-                });
-                
-                zone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.style.borderColor = '#ccc';
-                    this.style.background = '';
+            // Use template functionality
+            useTemplateBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const templateName = this.getAttribute('data-template');
+                    const template = templates[templateName];
                     
-                    handleFiles(e.dataTransfer.files);
-                });
-            });
-            
-            fileUpload.addEventListener('change', function() {
-                handleFiles(this.files);
-            });
-            
-            function handleFiles(files) {
-                if (files.length > 0) {
-                    console.log(`Processing ${files.length} files...`);
-                    
-                    // Simulate file processing
-                    const progressBar = document.getElementById('upload-progress');
-                    const uploadStatus = document.getElementById('upload-status');
-                    
-                    let progress = 0;
-                    const interval = setInterval(() => {
-                        progress += 5;
-                        progressBar.style.width = `${progress}%`;
-                        
-                        if (progress >= 100) {
-                            clearInterval(interval);
-                            uploadStatus.textContent = 'Upload completed!';
-                            
-                            // Add files to explorer
-                            for (let i = 0; i < Math.min(files.length, 5); i++) {
-                                const file = files[i];
-                                console.log(`Uploaded: ${file.name}`);
-                            }
-                            
-                            // Show success message
-                            setTimeout(() => {
-                                uploadModal.style.display = 'none';
-                                console.log('Files uploaded successfully!');
-                            }, 1000);
-                        }
-                    }, 100);
-                }
-            }
-            
-            // Theme toggle
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                
-                if (document.body.classList.contains('dark-mode')) {
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
-                } else {
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
-                }
-            });
-            
-            // Device preview toggle
-            deviceToggle.addEventListener('click', function() {
-                const previewFrame = document.getElementById('preview-frame');
-                
-                if (previewFrame.style.width === '375px') {
-                    previewFrame.style.width = '100%';
-                    previewFrame.style.maxWidth = '100%';
-                    deviceToggle.innerHTML = '<i class="fas fa-mobile-alt"></i> Mobile View';
-                } else {
-                    previewFrame.style.width = '375px';
-                    previewFrame.style.maxWidth = '375px';
-                    previewFrame.style.margin = '0 auto';
-                    deviceToggle.innerHTML = '<i class="fas fa-desktop"></i> Desktop View';
-                }
-            });
-            
-            // Collapsible sections
-            collapsibles.forEach(item => {
-                item.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    const content = this.nextElementSibling;
-                    
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                        this.querySelector('i').classList.replace('fa-chevron-up', 'fa-chevron-down');
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        this.querySelector('i').classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    if (template) {
+                        htmlCode.value = template.html;
+                        cssCode.value = template.css;
+                        jsCode.value = template.js;
+                        runCode();
+                        templatesModal.style.display = 'none';
+                        console.log(`"${templateName}" template loaded!`);
                     }
                 });
-            });
-            
-            // Install app functionality
-            let deferredPrompt;
-            
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installBtn.style.display = 'flex';
-            });
-            
-            installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    
-                    if (outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                    
-                    deferredPrompt = null;
-                    installBtn.style.display = 'none';
-                }
             });
             
             // Load saved code from localStorage
@@ -2277,28 +1114,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     e.preventDefault();
                     runCode();
                 }
-                
-                if (e.key === 'F5') {
-                    e.preventDefault();
-                    runCode();
-                }
             });
-            
-            // Handle mobile view
-            function handleMobileView() {
-                if (window.innerWidth < 768) {
-                    // Mobile-specific adjustments
-                    document.querySelectorAll('.code-area').forEach(area => {
-                        area.style.fontSize = '16px'; // Prevent zoom on iOS
-                    });
-                }
-            }
-            
-            // Initial call
-            handleMobileView();
-            
-            // Listen for resize events
-            window.addEventListener('resize', handleMobileView);
         });
     </script>
 </body>

@@ -1234,6 +1234,429 @@ echo "Squares: " . implode(", ", $squares) . "\n";
     </div>
 
     <script>
+        // Template data with 20+ templates
+        const templateData = [
+            { 
+                id: 1, 
+                name: "Corporate Business", 
+                category: "Business", 
+                description: "Professional website for corporate businesses",
+                html: "templates/business.html",
+                css: "templates/business.css",
+                js: "templates/business.js"
+            },
+            { 
+                id: 2, 
+                name: "Personal Blog", 
+                category: "Blog", 
+                description: "Clean and modern personal blogging platform",
+                html: "templates/blog.html",
+                css: "templates/blog.css",
+                js: "templates/blog.js"
+            },
+            { 
+                id: 3, 
+                name: "Travel Agency", 
+                category: "Business", 
+                description: "Beautiful travel agency website with booking capabilities",
+                html: "templates/travel.html",
+                css: "templates/travel.css",
+                js: "templates/travel.js"
+            },
+            { 
+                id: 4, 
+                name: "Online Store", 
+                category: "E-commerce", 
+                description: "Fully functional e-commerce store template",
+                html: "templates/ecommerce.html",
+                css: "templates/ecommerce.css",
+                js: "templates/ecommerce.js"
+            },
+            { 
+                id: 5, 
+                name: "Design Portfolio", 
+                category: "Portfolio", 
+                description: "Showcase your creative work with this portfolio",
+                html: "templates/portfolio.html",
+                css: "templates/portfolio.css",
+                js: "templates/portfolio.js"
+            },
+            { 
+                id: 6, 
+                name: "Restaurant", 
+                category: "Business", 
+                description: "Appetizing website for restaurants and cafes",
+                html: "templates/restaurant.html",
+                css: "templates/restaurant.css",
+                js: "templates/restaurant.js"
+            },
+            { 
+                id: 7, 
+                name: "Real Estate", 
+                category: "Business", 
+                description: "List properties with this real estate template",
+                html: "templates/realestate.html",
+                css: "templates/realestate.css",
+                js: "templates/realestate.js"
+            },
+            { 
+                id: 8, 
+                name: "Education Platform", 
+                category: "Education", 
+                description: "Online learning and course platform template",
+                html: "templates/education.html",
+                css: "templates/education.css",
+                js: "templates/education.js"
+            },
+            { 
+                id: 9, 
+                name: "Medical Clinic", 
+                category: "Business", 
+                description: "Professional website for medical practices",
+                html: "templates/medical.html",
+                css: "templates/medical.css",
+                js: "templates/medical.js"
+            },
+            { 
+                id: 10, 
+                name: "Tech Startup", 
+                category: "Business", 
+                description: "Modern website for technology startups",
+                html: "templates/startup.html",
+                css: "templates/startup.css",
+                js: "templates/startup.js"
+            },
+            { 
+                id: 11, 
+                name: "Music Band", 
+                category: "Entertainment", 
+                description: "Website for bands and musicians",
+                html: "templates/music.html",
+                css: "templates/music.css",
+                js: "templates/music.js"
+            },
+            { 
+                id: 12, 
+                name: "Event Management", 
+                category: "Business", 
+                description: "Plan and promote events with this template",
+                html: "templates/event.html",
+                css: "templates/event.css",
+                js: "templates/event.js"
+            },
+            { 
+                id: 13, 
+                name: "Wedding Planner", 
+                category: "Business", 
+                description: "Elegant website for wedding planning services",
+                html: "templates/wedding.html",
+                css: "templates/wedding.css",
+                js: "templates/wedding.js"
+            },
+            { 
+                id: 14, 
+                name: "Fitness Center", 
+                category: "Business", 
+                description: "Website for gyms and fitness centers",
+                html: "templates/fitness.html",
+                css: "templates/fitness.css",
+                js: "templates/fitness.js"
+            },
+            { 
+                id: 15, 
+                name: "Charity Organization", 
+                category: "Non-profit", 
+                description: "Website for non-profit organizations",
+                html: "templates/charity.html",
+                css: "templates/charity.css",
+                js: "templates/charity.js"
+            },
+            { 
+                id: 16, 
+                name: "Photography Portfolio", 
+                category: "Portfolio", 
+                description: "Showcase your photography with this elegant template",
+                html: "templates/photography.html",
+                css: "templates/photography.css",
+                js: "templates/photography.js"
+            },
+            { 
+                id: 17, 
+                name: "Law Firm", 
+                category: "Business", 
+                description: "Professional website for legal practices",
+                html: "templates/law.html",
+                css: "templates/law.css",
+                js: "templates/law.js"
+            },
+            { 
+                id: 18, 
+                name: "Coffee Shop", 
+                category: "Business", 
+                description: "Warm and inviting website for coffee shops",
+                html: "templates/coffee.html",
+                css: "templates/coffee.css",
+                js: "templates/coffee.js"
+            },
+            { 
+                id: 19, 
+                name: "Fashion Store", 
+                category: "E-commerce", 
+                description: "Stylish website for fashion retailers",
+                html: "templates/fashion.html",
+                css: "templates/fashion.css",
+                js: "templates/fashion.js"
+            },
+            { 
+                id: 20, 
+                name: "Consulting Agency", 
+                category: "Business", 
+                description: "Professional website for consulting services",
+                html: "templates/consulting.html",
+                css: "templates/consulting.css",
+                js: "templates/consulting.js"
+            },
+            { 
+                id: 21, 
+                name: "Hotel Website", 
+                category: "Business", 
+                description: "Booking website for hotels and accommodations",
+                html: "templates/hotel.html",
+                css: "templates/hotel.css",
+                js: "templates/hotel.js"
+            },
+            { 
+                id: 22, 
+                name: "Art Gallery", 
+                category: "Portfolio", 
+                description: "Showcase artwork with this elegant template",
+                html: "templates/art.html",
+                css: "templates/art.css",
+                js: "templates/art.js"
+            }
+        ];
+
+        // Sample template content for demonstration
+        // In a real implementation, these would be separate files
+        const templateFiles = {
+            "business.html": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Template</title>
+    <link rel="stylesheet" href="business.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Business Solutions</h1>
+            <p>Professional corporate website template</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome to Our Company</h2>
+            <p>We provide innovative solutions for your business needs</p>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+        
+        <div class="features">
+            <h2>Our Services</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Consulting</h3>
+                    <p>Expert advice for your business challenges</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Development</h3>
+                    <p>Custom software solutions</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Support</h3>
+                    <p>Ongoing maintenance and support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Business Solutions. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="business.js"></script>
+</body>
+</html>`,
+
+            "business.css": `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background: linear-gradient(90deg, #2c3e50, #4a69bd);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header p {
+    margin: 10px 0 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.hero {
+    background: white;
+    padding: 60px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin: 40px 0;
+    text-align: center;
+}
+
+.hero h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.btn {
+    display: inline-block;
+    background: #4a69bd;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #3c5aa6;
+    transform: translateY(-2px);
+}
+
+.features {
+    padding: 60px 0;
+}
+
+.features h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 40px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: #666;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    margin-top: 60px;
+    background: #2d3436;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 30px 0;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .hero {
+        padding: 40px 20px;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}`,
+
+            "business.js": `console.log('Business template loaded successfully!');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize animations or other functionality
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Thank you for your interest in our business solutions!');
+        });
+    });
+    
+    // Animate feature cards on scroll
+    const featureCards = document.querySelectorAll('.feature-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    featureCards.forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+});`
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             // DOM elements
             const htmlCode = document.getElementById('html-code');
@@ -1271,25 +1694,6 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const templateSearch = document.getElementById('template-search');
             const categoryBtns = document.querySelectorAll('.category-btn');
             
-            // Template data - a sample of the 500 templates
-            const templateData = [
-                { id: 1, name: "Corporate Business", category: "Business", description: "Professional website for corporate businesses" },
-                { id: 2, name: "Personal Blog", category: "Blog", description: "Clean and modern personal blogging platform" },
-                { id: 3, name: "Travel Agency", category: "Business", description: "Beautiful travel agency website with booking capabilities" },
-                { id: 4, name: "Online Store", category: "E-commerce", description: "Fully functional e-commerce store template" },
-                { id: 5, name: "Design Portfolio", category: "Portfolio", description: "Showcase your creative work with this portfolio" },
-                { id: 6, name: "Restaurant", category: "Business", description: "Appetizing website for restaurants and cafes" },
-                { id: 7, name: "Real Estate", category: "Business", description: "List properties with this real estate template" },
-                { id: 8, name: "Education Platform", category: "Education", description: "Online learning and course platform template" },
-                { id: 9, name: "Medical Clinic", category: "Business", description: "Professional website for medical practices" },
-                { id: 10, name: "Tech Startup", category: "Business", description: "Modern website for technology startups" },
-                { id: 11, name: "Music Band", category: "Entertainment", description: "Website for bands and musicians" },
-                { id: 12, name: "Event Management", category: "Business", description: "Plan and promote events with this template" },
-                { id: 13, name: "Wedding Planner", category: "Business", description: "Elegant website for wedding planning services" },
-                { id: 14, name: "Fitness Center", category: "Business", description: "Website for gyms and fitness centers" },
-                { id: 15, name: "Charity Organization", category: "Non-profit", description: "Website for non-profit organizations" }
-            ];
-            
             // Populate template gallery
             function populateTemplates() {
                 templateGallery.innerHTML = '';
@@ -1323,156 +1727,31 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             }
             
             // Load template into editor
-            function loadTemplate(id) {
+            async function loadTemplate(id) {
                 const template = templateData.find(t => t.id == id);
                 if (!template) return;
                 
-                // Set HTML content
-                htmlCode.value = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${template.name}</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background: linear-gradient(90deg, #4a69bd, #6a89cc);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        .hero {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            margin: 30px 0;
-            text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            background: #4a69bd;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background: #3c5aa6;
-            transform: translateY(-2px);
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background: #2d3436;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>${template.name}</h1>
-            <p>Professional ${template.category} Website</p>
-        </div>
-    </header>
-    
-    <div class="container">
-        <div class="hero">
-            <h2>Welcome to Our ${template.name}</h2>
-            <p>This is a sample template for a ${template.name} website. Customize it to fit your needs.</p>
-            <a href="#" class="btn">Get Started</a>
-        </div>
-        
-        <div class="features">
-            <h2>Features</h2>
-            <p>This template includes all essential sections for a ${template.name} website.</p>
-        </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 ${template.name}. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>`;
-                
-                // Set CSS content
-                cssCode.value = `/* Additional CSS for ${template.name} */
-.features {
-    padding: 40px 0;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.feature-card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-@media (max-width: 768px) {
-    .hero {
-        padding: 20px;
-    }
-    
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
-}`;
-                
-                // Set JS content
-                jsCode.value = `// JavaScript for ${template.name}
-console.log('${template.name} template loaded successfully!');
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize animations or other functionality
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Button clicked! This is the ${template.name} template.');
-        });
-    });
-});`;
-                
-                // Run the code to show preview
-                runCode();
-                
-                // Notify user
-                console.log(`"${template.name}" template loaded!`);
+                try {
+                    // In a real implementation, you would fetch these from external files
+                    // For this example, we're using the templateFiles object
+                    
+                    // Set HTML content
+                    htmlCode.value = templateFiles['business.html'];
+                    
+                    // Set CSS content
+                    cssCode.value = templateFiles['business.css'];
+                    
+                    // Set JS content
+                    jsCode.value = templateFiles['business.js'];
+                    
+                    // Run the code to show preview
+                    runCode();
+                    
+                    // Notify user
+                    console.log(`"${template.name}" template loaded!`);
+                } catch (error) {
+                    console.error('Error loading template:', error);
+                }
             }
             
             // Store original console methods

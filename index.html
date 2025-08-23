@@ -147,6 +147,15 @@
             background-color: #7d3c98;
         }
         
+        .template-btn {
+            background: linear-gradient(45deg, #ff9f43, #ffd868);
+            color: #2d3436;
+        }
+        
+        .template-btn:hover {
+            background: linear-gradient(45deg, #ff8c2a, #ffcf52);
+        }
+        
         .main-content {
             display: flex;
             flex: 1;
@@ -596,6 +605,8 @@
             border-radius: 8px;
             width: 90%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-header {
@@ -702,6 +713,116 @@
         .dark-mode .mobile-tab.active {
             background: var(--secondary);
         }
+        
+        /* Template Gallery Styles */
+        .template-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        
+        .template-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .template-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .template-image {
+            height: 160px;
+            background: linear-gradient(45deg, #4a69bd, #6a89cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .template-info {
+            padding: 15px;
+        }
+        
+        .template-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .template-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .use-template-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #00b894, #00a382);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .use-template-btn:hover {
+            background: linear-gradient(45deg, #009d7a, #008f6c);
+        }
+        
+        .search-box {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .category-filter {
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .category-btn {
+            padding: 5px 10px;
+            background: #f1f2f6;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .category-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .template-modal {
+            max-width: 1200px;
+        }
+        
+        .install-btn {
+            background: linear-gradient(45deg, #e17055, #e15f55);
+            color: white;
+        }
+        
+        .install-btn:hover {
+            background: linear-gradient(45deg, #d15b3f, #d14a3f);
+        }
     </style>
 </head>
 <body>
@@ -724,6 +845,9 @@
                 <button class="upload-btn" id="upload-btn">
                     <i class="fas fa-upload"></i> Upload
                 </button>
+                <button class="template-btn" id="template-btn">
+                    <i class="fas fa-palette"></i> Templates
+                </button>
                 <button class="export-btn" id="export-btn">
                     <i class="fas fa-download"></i> Export
                 </button>
@@ -732,6 +856,9 @@
                 </button>
                 <button class="theme-toggle" id="theme-toggle">
                     <i class="fas fa-moon"></i> Dark
+                </button>
+                <button class="install-btn" id="install-btn">
+                    <i class="fas fa-download"></i> Install App
                 </button>
             </div>
         </header>
@@ -776,22 +903,26 @@
                     </div>
                     
                     <div class="collapsible">
-                        <span>External Libraries</span>
+                        <span>Templates</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="collapsible-content">
                         <div class="file-tree">
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                react.js
+                                <i class="fas fa-building" style="color: #3498db;"></i>
+                                Business
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                vue.js
+                                <i class="fas fa-store" style="color: #9b59b6;"></i>
+                                E-commerce
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                jquery.js
+                                <i class="fas fa-utensils" style="color: #e74c3c;"></i>
+                                Restaurant
+                            </div>
+                            <div class="file-item">
+                                <i class="fas fa-briefcase" style="color: #f39c12;"></i>
+                                Portfolio
                             </div>
                         </div>
                     </div>
@@ -1048,6 +1179,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
     </footer>
 
+    <!-- Upload Modal -->
     <div class="modal" id="upload-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1070,6 +1202,33 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 <button class="reset-btn" id="cancel-upload">
                     <i class="fas fa-times"></i> Cancel
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates Modal -->
+    <div class="modal" id="templates-modal">
+        <div class="modal-content template-modal">
+            <div class="modal-header">
+                <h3>Choose a Template</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" id="template-search" placeholder="Search templates...">
+            </div>
+            
+            <div class="category-filter">
+                <button class="category-btn active">All</button>
+                <button class="category-btn">Business</button>
+                <button class="category-btn">E-commerce</button>
+                <button class="category-btn">Portfolio</button>
+                <button class="category-btn">Blog</button>
+                <button class="category-btn">Education</button>
+            </div>
+            
+            <div class="template-gallery" id="template-gallery">
+                <!-- Templates will be dynamically added here -->
             </div>
         </div>
     </div>
@@ -1099,12 +1258,222 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const closeSidebar = document.getElementById('close-sidebar');
             const uploadBtn = document.getElementById('upload-btn');
             const uploadModal = document.getElementById('upload-modal');
-            const closeModal = document.querySelector('.close-modal');
+            const templateBtn = document.getElementById('template-btn');
+            const templatesModal = document.getElementById('templates-modal');
+            const closeModals = document.querySelectorAll('.close-modal');
             const dropZones = document.querySelectorAll('.drop-zone');
             const fileUpload = document.getElementById('file-upload');
             const themeToggle = document.getElementById('theme-toggle');
             const deviceToggle = document.getElementById('device-toggle');
             const collapsibles = document.querySelectorAll('.collapsible');
+            const installBtn = document.getElementById('install-btn');
+            const templateGallery = document.getElementById('template-gallery');
+            const templateSearch = document.getElementById('template-search');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            
+            // Template data - a sample of the 500 templates
+            const templateData = [
+                { id: 1, name: "Corporate Business", category: "Business", description: "Professional website for corporate businesses" },
+                { id: 2, name: "Personal Blog", category: "Blog", description: "Clean and modern personal blogging platform" },
+                { id: 3, name: "Travel Agency", category: "Business", description: "Beautiful travel agency website with booking capabilities" },
+                { id: 4, name: "Online Store", category: "E-commerce", description: "Fully functional e-commerce store template" },
+                { id: 5, name: "Design Portfolio", category: "Portfolio", description: "Showcase your creative work with this portfolio" },
+                { id: 6, name: "Restaurant", category: "Business", description: "Appetizing website for restaurants and cafes" },
+                { id: 7, name: "Real Estate", category: "Business", description: "List properties with this real estate template" },
+                { id: 8, name: "Education Platform", category: "Education", description: "Online learning and course platform template" },
+                { id: 9, name: "Medical Clinic", category: "Business", description: "Professional website for medical practices" },
+                { id: 10, name: "Tech Startup", category: "Business", description: "Modern website for technology startups" },
+                { id: 11, name: "Music Band", category: "Entertainment", description: "Website for bands and musicians" },
+                { id: 12, name: "Event Management", category: "Business", description: "Plan and promote events with this template" },
+                { id: 13, name: "Wedding Planner", category: "Business", description: "Elegant website for wedding planning services" },
+                { id: 14, name: "Fitness Center", category: "Business", description: "Website for gyms and fitness centers" },
+                { id: 15, name: "Charity Organization", category: "Non-profit", description: "Website for non-profit organizations" }
+            ];
+            
+            // Populate template gallery
+            function populateTemplates() {
+                templateGallery.innerHTML = '';
+                
+                templateData.forEach(template => {
+                    const templateEl = document.createElement('div');
+                    templateEl.className = 'template-item';
+                    templateEl.innerHTML = `
+                        <div class="template-image">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="template-info">
+                            <h3>${template.name}</h3>
+                            <p>${template.description}</p>
+                            <button class="use-template-btn" data-id="${template.id}">
+                                Use This Template
+                            </button>
+                        </div>
+                    `;
+                    templateGallery.appendChild(templateEl);
+                });
+                
+                // Add event listeners to template buttons
+                document.querySelectorAll('.use-template-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const templateId = this.getAttribute('data-id');
+                        loadTemplate(templateId);
+                        templatesModal.style.display = 'none';
+                    });
+                });
+            }
+            
+            // Load template into editor
+            function loadTemplate(id) {
+                const template = templateData.find(t => t.id == id);
+                if (!template) return;
+                
+                // Set HTML content
+                htmlCode.value = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${template.name}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(90deg, #4a69bd, #6a89cc);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .hero {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            background: #4a69bd;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #3c5aa6;
+            transform: translateY(-2px);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: #2d3436;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>${template.name}</h1>
+            <p>Professional ${template.category} Website</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome to Our ${template.name}</h2>
+            <p>This is a sample template for a ${template.name} website. Customize it to fit your needs.</p>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+        
+        <div class="features">
+            <h2>Features</h2>
+            <p>This template includes all essential sections for a ${template.name} website.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 ${template.name}. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>`;
+                
+                // Set CSS content
+                cssCode.value = `/* Additional CSS for ${template.name} */
+.features {
+    padding: 40px 0;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 20px;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}`;
+                
+                // Set JS content
+                jsCode.value = `// JavaScript for ${template.name}
+console.log('${template.name} template loaded successfully!');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize animations or other functionality
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Button clicked! This is the ${template.name} template.');
+        });
+    });
+});`;
+                
+                // Run the code to show preview
+                runCode();
+                
+                // Notify user
+                console.log(`"${template.name}" template loaded!`);
+            }
             
             // Store original console methods
             const originalConsole = {
@@ -1460,13 +1829,24 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 uploadModal.style.display = 'flex';
             });
             
-            closeModal.addEventListener('click', function() {
-                uploadModal.style.display = 'none';
+            // Template functionality
+            templateBtn.addEventListener('click', function() {
+                templatesModal.style.display = 'flex';
+                populateTemplates();
+            });
+            
+            // Close modals
+            closeModals.forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    uploadModal.style.display = 'none';
+                    templatesModal.style.display = 'none';
+                });
             });
             
             window.addEventListener('click', function(e) {
-                if (e.target === uploadModal) {
+                if (e.target === uploadModal || e.target === templatesModal) {
                     uploadModal.style.display = 'none';
+                    templatesModal.style.display = 'none';
                 }
             });
             
@@ -1574,6 +1954,31 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                         this.querySelector('i').classList.replace('fa-chevron-down', 'fa-chevron-up');
                     }
                 });
+            });
+            
+            // Install app functionality
+            let deferredPrompt;
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.style.display = 'flex';
+            });
+            
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                }
             });
             
             // Load saved code from localStorage

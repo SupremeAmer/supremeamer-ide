@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SupremeAmer Web IDE Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -34,6 +35,7 @@
             --go: #00add8;
             --rust: #000000;
             --sidebar-width: 250px;
+            --pdf-sidebar-width: 300px;
         }
         
         body {
@@ -145,6 +147,15 @@
         
         .upload-btn:hover {
             background-color: #7d3c98;
+        }
+        
+        .pdf-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .pdf-btn:hover {
+            background-color: #c0392b;
         }
         
         .main-content {
@@ -702,6 +713,140 @@
         .dark-mode .mobile-tab.active {
             background: var(--secondary);
         }
+        
+        /* PDF Viewer Styles */
+        .pdf-viewer-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background-color: #f1f2f6;
+        }
+        
+        .pdf-toolbar {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pdf-toolbar button {
+            padding: 6px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .pdf-page-controls {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 10px;
+        }
+        
+        .pdf-page-controls input {
+            width: 50px;
+            text-align: center;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .pdf-viewport {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #525659;
+        }
+        
+        .pdf-canvas {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pdf-sidebar {
+            width: var(--pdf-sidebar-width);
+            background: #f8f9fa;
+            border-left: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .pdf-sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pdf-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .pdf-thumbnail {
+            margin-bottom: 15px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .pdf-thumbnail:hover {
+            border-color: var(--secondary);
+        }
+        
+        .pdf-thumbnail.active {
+            border-color: var(--info);
+        }
+        
+        .pdf-thumbnail img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+        }
+        
+        .pdf-thumbnail p {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .pdf-viewer-toggle {
+            display: none;
+        }
+        
+        @media (max-width: 1200px) {
+            .pdf-sidebar {
+                position: absolute;
+                right: -100%;
+                top: 0;
+                height: 100%;
+                z-index: 90;
+                box-shadow: -3px 0 10px rgba(0,0,0,0.1);
+                transition: right 0.3s ease;
+            }
+            
+            .pdf-sidebar.open {
+                right: 0;
+            }
+            
+            .pdf-viewer-toggle {
+                display: block;
+            }
+        }
+        
+        .pdf-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -726,6 +871,9 @@
                 </button>
                 <button class="export-btn" id="export-btn">
                     <i class="fas fa-download"></i> Export
+                </button>
+                <button class="pdf-btn" id="pdf-viewer-toggle">
+                    <i class="fas fa-file-pdf"></i> PDF Viewer
                 </button>
                 <button class="reset-btn" id="reset-btn">
                     <i class="fas fa-redo"></i> Reset
@@ -764,14 +912,36 @@
                                 <i class="fab fa-js-square" style="color: var(--js);"></i>
                                 script.js
                             </div>
-                            <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                assets
+                            <div class="collapsible">
+                                <span><i class="fas fa-folder"></i> Assets</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="collapsible-content">
+                                <div class="file-tree" id="assets-folder">
+                                    <div class="file-item">
+                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
+                                        documentation.pdf
+                                    </div>
+                                    <div class="file-item">
+                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
+                                        tutorial.pdf
+                                    </div>
+                                </div>
                             </div>
                             <div class="file-item">
                                 <i class="fas fa-folder"></i>
                                 components
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="collapsible">
+                        <span>PDF Files</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="file-tree" id="pdf-list">
+                            <!-- PDF files will be dynamically added here -->
                         </div>
                     </div>
                     
@@ -803,7 +973,7 @@
                         <p>Drag & drop files or folders here</p>
                         <p>or click to browse</p>
                     </label>
-                    <input type="file" id="file-upload" class="file-input" multiple webkitdirectory>
+                    <input type="file" id="file-upload" class="file-input" multiple accept=".pdf">
                 </div>
             </div>
             
@@ -1029,6 +1199,18 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                     <iframe id="preview-frame"></iframe>
                 </div>
             </div>
+            
+            <div class="pdf-sidebar" id="pdf-sidebar">
+                <div class="pdf-sidebar-header">
+                    <h3>PDF Viewer</h3>
+                    <button class="sidebar-toggle" id="close-pdf-sidebar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="pdf-list" id="pdf-thumbnails">
+                    <!-- PDF thumbnails will be added here -->
+                </div>
+            </div>
         </div>
         
         <div class="resizer" id="horizontal-resizer"></div>
@@ -1105,6 +1287,19 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const themeToggle = document.getElementById('theme-toggle');
             const deviceToggle = document.getElementById('device-toggle');
             const collapsibles = document.querySelectorAll('.collapsible');
+            const pdfViewerToggle = document.getElementById('pdf-viewer-toggle');
+            const pdfSidebar = document.getElementById('pdf-sidebar');
+            const closePdfSidebar = document.getElementById('close-pdf-sidebar');
+            const pdfList = document.getElementById('pdf-list');
+            const pdfThumbnails = document.getElementById('pdf-thumbnails');
+            
+            // PDF-related variables
+            let pdfDocs = [];
+            let currentPdf = null;
+            let currentPage = 1;
+            let pageRendering = false;
+            let pageNumPending = null;
+            let scale = 1.5;
             
             // Store original console methods
             const originalConsole = {
@@ -1455,6 +1650,15 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 sidebar.classList.remove('open');
             });
             
+            // PDF sidebar toggle
+            pdfViewerToggle.addEventListener('click', function() {
+                pdfSidebar.classList.toggle('open');
+            });
+            
+            closePdfSidebar.addEventListener('click', function() {
+                pdfSidebar.classList.remove('open');
+            });
+            
             // Upload functionality
             uploadBtn.addEventListener('click', function() {
                 uploadModal.style.display = 'flex';
@@ -1504,7 +1708,17 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 if (files.length > 0) {
                     console.log(`Processing ${files.length} files...`);
                     
-                    // Simulate file processing
+                    // Process PDF files
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        if (file.type === 'application/pdf') {
+                            addPdfFile(file);
+                        } else {
+                            console.log(`File ${file.name} is not a PDF and was ignored.`);
+                        }
+                    }
+                    
+                    // Simulate file processing for non-PDF files
                     const progressBar = document.getElementById('upload-progress');
                     const uploadStatus = document.getElementById('upload-status');
                     
@@ -1517,12 +1731,6 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                             clearInterval(interval);
                             uploadStatus.textContent = 'Upload completed!';
                             
-                            // Add files to explorer
-                            for (let i = 0; i < Math.min(files.length, 5); i++) {
-                                const file = files[i];
-                                console.log(`Uploaded: ${file.name}`);
-                            }
-                            
                             // Show success message
                             setTimeout(() => {
                                 uploadModal.style.display = 'none';
@@ -1530,6 +1738,198 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                             }, 1000);
                         }
                     }, 100);
+                }
+            }
+            
+            function addPdfFile(file) {
+                const fileReader = new FileReader();
+                
+                fileReader.onload = function() {
+                    const typedarray = new Uint8Array(this.result);
+                    
+                    // Load the PDF with pdf.js
+                    pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                        console.log(`PDF loaded: ${file.name}`);
+                        
+                        // Store the PDF document
+                        pdfDocs.push({
+                            name: file.name,
+                            doc: pdf,
+                            url: URL.createObjectURL(file)
+                        });
+                        
+                        // Add to PDF list in sidebar
+                        const pdfItem = document.createElement('div');
+                        pdfItem.className = 'file-item';
+                        pdfItem.innerHTML = `<i class="fas fa-file-pdf" style="color: #e74c3c;"></i> ${file.name}`;
+                        
+                        pdfItem.addEventListener('click', function() {
+                            openPdf(pdfDocs[pdfDocs.length - 1]);
+                        });
+                        
+                        pdfList.appendChild(pdfItem);
+                        
+                        // Generate thumbnail for PDF sidebar
+                        generatePdfThumbnail(pdf, file.name);
+                    }).catch(function(error) {
+                        console.error('Error loading PDF:', error);
+                    });
+                };
+                
+                fileReader.readAsArrayBuffer(file);
+            }
+            
+            function generatePdfThumbnail(pdf, fileName) {
+                // Get the first page
+                pdf.getPage(1).then(function(page) {
+                    const viewport = page.getViewport({ scale: 0.5 });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    page.render(renderContext).promise.then(function() {
+                        const thumbnail = document.createElement('div');
+                        thumbnail.className = 'pdf-thumbnail';
+                        thumbnail.innerHTML = `
+                            <img src="${canvas.toDataURL()}" alt="${fileName}">
+                            <p>${fileName}</p>
+                        `;
+                        
+                        thumbnail.addEventListener('click', function() {
+                            openPdf(pdfDocs.find(pdf => pdf.name === fileName));
+                        });
+                        
+                        pdfThumbnails.appendChild(thumbnail);
+                    });
+                });
+            }
+            
+            function openPdf(pdf) {
+                currentPdf = pdf;
+                currentPage = 1;
+                
+                // Create PDF viewer if it doesn't exist
+                let pdfViewer = document.querySelector('.pdf-viewer-container');
+                
+                if (!pdfViewer) {
+                    pdfViewer = document.createElement('div');
+                    pdfViewer.className = 'pdf-viewer-container';
+                    pdfViewer.innerHTML = `
+                        <div class="pdf-toolbar">
+                            <button id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button id="next-page">Next <i class="fas fa-arrow-right"></i></button>
+                            <div class="pdf-page-controls">
+                                <span>Page:</span>
+                                <input type="number" id="page-num" value="1" min="1">
+                                <span>of <span id="page-count">0</span></span>
+                            </div>
+                            <button id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                            <button id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                            <button id="download-pdf"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                        <div class="pdf-viewport">
+                            <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+                        </div>
+                    `;
+                    
+                    // Replace preview with PDF viewer
+                    const preview = document.querySelector('.preview');
+                    preview.innerHTML = '';
+                    preview.appendChild(pdfViewer);
+                    
+                    // Add event listeners for PDF controls
+                    document.getElementById('prev-page').addEventListener('click', function() {
+                        if (currentPage <= 1) return;
+                        currentPage--;
+                        renderPage(currentPage);
+                    });
+                    
+                    document.getElementById('next-page').addEventListener('click', function() {
+                        if (currentPage >= currentPdf.doc.numPages) return;
+                        currentPage++;
+                        renderPage(currentPage);
+                    });
+                    
+                    document.getElementById('page-num').addEventListener('change', function() {
+                        const pageNumber = parseInt(this.value);
+                        if (pageNumber > 0 && pageNumber <= currentPdf.doc.numPages) {
+                            currentPage = pageNumber;
+                            renderPage(currentPage);
+                        } else {
+                            this.value = currentPage;
+                        }
+                    });
+                    
+                    document.getElementById('zoom-in').addEventListener('click', function() {
+                        scale += 0.25;
+                        renderPage(currentPage);
+                    });
+                    
+                    document.getElementById('zoom-out').addEventListener('click', function() {
+                        if (scale <= 0.5) return;
+                        scale -= 0.25;
+                        renderPage(currentPage);
+                    });
+                    
+                    document.getElementById('download-pdf').addEventListener('click', function() {
+                        const a = document.createElement('a');
+                        a.href = currentPdf.url;
+                        a.download = currentPdf.name;
+                        a.click();
+                    });
+                }
+                
+                // Update page count
+                document.getElementById('page-count').textContent = pdf.doc.numPages;
+                
+                // Render the first page
+                renderPage(1);
+            }
+            
+            function renderPage(pageNum) {
+                pageRendering = true;
+                
+                currentPdf.doc.getPage(pageNum).then(function(page) {
+                    const viewport = page.getViewport({ scale: scale });
+                    const canvas = document.getElementById('pdf-canvas');
+                    const context = canvas.getContext('2d');
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    const renderTask = page.render(renderContext);
+                    
+                    renderTask.promise.then(function() {
+                        pageRendering = false;
+                        
+                        // Update page number
+                        document.getElementById('page-num').value = pageNum;
+                        
+                        if (pageNumPending !== null) {
+                            renderPage(pageNumPending);
+                            pageNumPending = null;
+                        }
+                    });
+                });
+            }
+            
+            function queueRenderPage(pageNum) {
+                if (pageRendering) {
+                    pageNumPending = pageNum;
+                } else {
+                    renderPage(pageNum);
                 }
             }
             
@@ -1615,6 +2015,28 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
             
             // Listen for resize events
             window.addEventListener('resize', handleMobileView);
+            
+            // Add sample PDF files to the list
+            const samplePdfs = [
+                'Documentation.pdf',
+                'Tutorial.pdf',
+                'User-Guide.pdf',
+                'API-Reference.pdf',
+                'Sample-Project.pdf'
+            ];
+            
+            samplePdfs.forEach(pdfName => {
+                const pdfItem = document.createElement('div');
+                pdfItem.className = 'file-item';
+                pdfItem.innerHTML = `<i class="fas fa-file-pdf" style="color: #e74c3c;"></i> ${pdfName}`;
+                
+                pdfItem.addEventListener('click', function() {
+                    console.log(`Would open PDF: ${pdfName}`);
+                    // In a real implementation, this would load the actual PDF
+                });
+                
+                pdfList.appendChild(pdfItem);
+            });
         });
     </script>
 </body>

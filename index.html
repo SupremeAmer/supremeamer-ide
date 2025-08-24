@@ -825,6 +825,71 @@
             margin-right: 5px;
         }
         
+        /* File upload area */
+        .file-upload-area {
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .uploaded-files {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background: white;
+        }
+        
+        .uploaded-file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .file-action-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+        
+        .file-action-btn:hover {
+            background: #e9ecef;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            color: #dc3545;
+            padding: 8px;
+            border-radius: 4px;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            margin: 10px 0;
+        }
+        
+        /* Success message styling */
+        .success-message {
+            color: #155724;
+            padding: 8px;
+            border-radius: 4px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            margin: 10px 0;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -942,13 +1007,13 @@
                     </div>
                     <div class="collapsible-content">
                         <div class="file-tree">
-                            <div class="file-item active">
+                            <div class="file-item active" data-file="index.html">
                                 <i class="fab fa-html5" style="color: var(--html);"></i> index.html
                             </div>
-                            <div class="file-item">
+                            <div class="file-item" data-file="style.css">
                                 <i class="fab fa-css3-alt" style="color: var(--css);"></i> style.css
                             </div>
-                            <div class="file-item">
+                            <div class="file-item" data-file="script.js">
                                 <i class="fab fa-js-square" style="color: var(--js);"></i> script.js
                             </div>
                             <div class="collapsible">
@@ -957,10 +1022,10 @@
                             </div>
                             <div class="collapsible-content">
                                 <div class="file-tree" id="assets-folder">
-                                    <div class="file-item">
+                                    <div class="file-item" data-file="documentation.pdf">
                                         <i class="fas fa-file-pdf" style="color: #e74c3c;"></i> documentation.pdf
                                     </div>
-                                    <div class="file-item">
+                                    <div class="file-item" data-file="tutorial.pdf">
                                         <i class="fas fa-file-pdf" style="color: #e74c3c;"></i> tutorial.pdf
                                     </div>
                                 </div>
@@ -976,13 +1041,13 @@
                     </div>
                     <div class="collapsible-content">
                         <div class="file-tree">
-                            <div class="file-item">
+                            <div class="file-item" data-file="react.js">
                                 <i class="fab fa-js-square" style="color: var(--js);"></i> react.js
                             </div>
-                            <div class="file-item">
+                            <div class="file-item" data-file="vue.js">
                                 <i class="fab fa-js-square" style="color: var(--js);"></i> vue.js
                             </div>
-                            <div class="file-item">
+                            <div class="file-item" data-file="jquery.js">
                                 <i class="fab fa-js-square" style="color: var(--js);"></i> jquery.js
                             </div>
                         </div>
@@ -1005,6 +1070,9 @@
                         <button class="git-action-btn" id="git-status-btn">
                             <i class="fas fa-list"></i> Status
                         </button>
+                        <button class="git-action-btn" id="git-add-btn">
+                            <i class="fas fa-plus-square"></i> Add All
+                        </button>
                         <button class="git-action-btn" id="git-commit-btn">
                             <i class="fas fa-check"></i> Commit
                         </button>
@@ -1026,13 +1094,32 @@
                     </div>
                 </div>
                 
-                <div class="upload-area">
+                <!-- File Upload Area -->
+                <div class="file-upload-area">
+                    <h4>Uploaded Files</h4>
+                    <div class="uploaded-files" id="uploaded-files">
+                        <div class="uploaded-file">
+                            <div class="uploaded-file-info">
+                                <i class="fas fa-file-code"></i>
+                                <span>example.js</span>
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn edit-file">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="file-action-btn delete-file">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <label for="file-upload" class="drop-zone" id="drop-zone">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <p>Drag & drop files or folders here</p>
                         <p>or click to browse</p>
                     </label>
-                    <input type="file" id="file-upload" class="file-input" multiple webkitdirectory>
+                    <input type="file" id="file-upload" class="file-input" multiple>
                 </div>
             </div>
 
@@ -1270,7 +1357,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         </div>
 
         <footer>
-            <p>© 2025 SupremeAmer Application Development Organization. All rights reserved.</p>
+            <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
         </footer>
 
         <div class="modal" id="upload-modal">
@@ -1336,12 +1423,17 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const gitBtn = document.getElementById('git-btn');
             const gitInitBtn = document.getElementById('git-init');
             const gitStatusBtn = document.getElementById('git-status-btn');
+            const gitAddBtn = document.getElementById('git-add-btn');
             const gitCommitBtn = document.getElementById('git-commit-btn');
             const gitPushBtn = document.getElementById('git-push-btn');
             const gitPullBtn = document.getElementById('git-pull-btn');
             const gitCommitMessage = document.getElementById('git-commit-message');
             const gitStatus = document.getElementById('git-status');
             const currentBranch = document.getElementById('current-branch');
+            
+            // File elements
+            const uploadedFilesContainer = document.getElementById('uploaded-files');
+            const fileItems = document.querySelectorAll('.file-item');
 
             // Store original console methods
             const originalConsole = {
@@ -1452,19 +1544,37 @@ echo "Squares: " . implode(", ", $squares) . "\n";
 
             // Save code to localStorage
             saveBtn.addEventListener('click', function() {
-                localStorage.setItem('supremeamer_html', htmlCode.value);
-                localStorage.setItem('supremeamer_css', cssCode.value);
-                localStorage.setItem('supremeamer_js', jsCode.value);
-                console.log('Code saved successfully!');
+                try {
+                    localStorage.setItem('supremeamer_html', htmlCode.value);
+                    localStorage.setItem('supremeamer_css', cssCode.value);
+                    localStorage.setItem('supremeamer_js', jsCode.value);
+                    
+                    // Save uploaded files
+                    const uploadedFiles = Array.from(uploadedFilesContainer.querySelectorAll('.uploaded-file')).map(file => {
+                        return {
+                            name: file.querySelector('span').textContent,
+                            content: localStorage.getItem(`supremeamer_file_${file.querySelector('span').textContent}`) || ''
+                        };
+                    });
+                    
+                    localStorage.setItem('supremeamer_uploaded_files', JSON.stringify(uploadedFiles));
+                    
+                    console.log('Code saved successfully!');
+                    showSuccessMessage('All files saved successfully!');
+                } catch (error) {
+                    console.error('Error saving files:', error);
+                    showErrorMessage('Failed to save files: ' + error.message);
+                }
             });
 
             // Export code as HTML file
             exportBtn.addEventListener('click', function() {
-                const html = htmlCode.value;
-                const css = cssCode.value;
-                const js = jsCode.value;
+                try {
+                    const html = htmlCode.value;
+                    const css = cssCode.value;
+                    const js = jsCode.value;
 
-                const fullHtml = `<!DOCTYPE html>
+                    const fullHtml = `<!DOCTYPE html>
 <html>
 <head>
     <title>SupremeAmer App</title>
@@ -1476,20 +1586,26 @@ echo "Squares: " . implode(", ", $squares) . "\n";
 </body>
 </html>`;
 
-                const blob = new Blob([fullHtml], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'supremeamer_app.html';
-                a.click();
-                URL.revokeObjectURL(url);
-                console.log('Code exported as HTML file!');
+                    const blob = new Blob([fullHtml], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'supremeamer_app.html';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    console.log('Code exported as HTML file!');
+                    showSuccessMessage('Project exported successfully!');
+                } catch (error) {
+                    console.error('Error exporting project:', error);
+                    showErrorMessage('Failed to export project: ' + error.message);
+                }
             });
 
             // Reset code to default
             resetBtn.addEventListener('click', function() {
                 if (confirm('Are you sure you want to reset all code? This cannot be undone.')) {
-                    htmlCode.value = `<!DOCTYPE html>
+                    try {
+                        htmlCode.value = `<!DOCTYPE html>
 <html>
 <head>
     <title>SupremeAmer App</title>
@@ -1537,7 +1653,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
 </body>
 </html>`;
 
-                    cssCode.value = `/* Additional CSS styles */
+                        cssCode.value = `/* Additional CSS styles */
 
 .container {
     transition: all 0.3s ease;
@@ -1562,7 +1678,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
     }
 }`;
 
-                    jsCode.value = `// JavaScript code
+                        jsCode.value = `// JavaScript code
 
 function showMessage() {
     const output = document.getElementById('output');
@@ -1582,8 +1698,17 @@ function calculate(a, b) {
 console.log('Welcome to SupremeAmer Web IDE!');
 console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
 
-                    runCode();
-                    console.log('Editor reset to default code!');
+                        // Clear uploaded files
+                        uploadedFilesContainer.innerHTML = '';
+                        localStorage.removeItem('supremeamer_uploaded_files');
+                        
+                        runCode();
+                        console.log('Editor reset to default code!');
+                        showSuccessMessage('Editor reset successfully!');
+                    } catch (error) {
+                        console.error('Error resetting editor:', error);
+                        showErrorMessage('Failed to reset editor: ' + error.message);
+                    }
                 }
             });
 
@@ -1668,7 +1793,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     if (t.getAttribute('data-tab') === tabName) {
                         t.classList.add('active');
                     } else {
-                        t.classList.remove('active');
+                    t.classList.remove('active');
                     }
                 });
                 
@@ -1750,18 +1875,137 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                             uploadStatus.textContent = 'Upload completed!';
                             
                             // Add files to explorer
-                            for (let i = 0; i < Math.min(files.length, 5); i++) {
+                            for (let i = 0; i < files.length; i++) {
                                 const file = files[i];
-                                console.log(`Uploaded: ${file.name}`);
+                                const reader = new FileReader();
+                                
+                                reader.onload = function(e) {
+                                    try {
+                                        const content = e.target.result;
+                                        addUploadedFile(file.name, content);
+                                        console.log(`Uploaded: ${file.name}`);
+                                    } catch (error) {
+                                        console.error(`Error processing file ${file.name}:`, error);
+                                        showErrorMessage(`Failed to process ${file.name}: ${error.message}`);
+                                    }
+                                };
+                                
+                                reader.onerror = function() {
+                                    console.error(`Failed to read file: ${file.name}`);
+                                    showErrorMessage(`Failed to read file: ${file.name}`);
+                                };
+                                
+                                reader.readAsText(file);
                             }
                             
                             // Show success message
                             setTimeout(() => {
                                 uploadModal.style.display = 'none';
                                 console.log('Files uploaded successfully!');
+                                showSuccessMessage('Files uploaded successfully!');
                             }, 1000);
                         }
                     }, 100);
+                }
+            }
+
+            function addUploadedFile(name, content) {
+                try {
+                    // Save file content to localStorage
+                    localStorage.setItem(`supremeamer_file_${name}`, content);
+                    
+                    // Create file element
+                    const fileElement = document.createElement('div');
+                    fileElement.classList.add('uploaded-file');
+                    fileElement.innerHTML = `
+                        <div class="uploaded-file-info">
+                            <i class="fas fa-file-code"></i>
+                            <span>${name}</span>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn edit-file">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="file-action-btn delete-file">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Add event listeners
+                    fileElement.querySelector('.edit-file').addEventListener('click', function() {
+                        editUploadedFile(name, content);
+                    });
+                    
+                    fileElement.querySelector('.delete-file').addEventListener('click', function() {
+                        deleteUploadedFile(name, fileElement);
+                    });
+                    
+                    uploadedFilesContainer.appendChild(fileElement);
+                    
+                    // Update saved files list
+                    const uploadedFiles = JSON.parse(localStorage.getItem('supremeamer_uploaded_files') || '[]');
+                    uploadedFiles.push({ name, content });
+                    localStorage.setItem('supremeamer_uploaded_files', JSON.stringify(uploadedFiles));
+                } catch (error) {
+                    console.error('Error adding uploaded file:', error);
+                    showErrorMessage('Failed to add uploaded file: ' + error.message);
+                }
+            }
+            
+            function editUploadedFile(name, content) {
+                try {
+                    // Create a new editor tab for the file
+                    const fileExtension = name.split('.').pop().toLowerCase();
+                    let editorType = 'js';
+                    
+                    if (fileExtension === 'html') editorType = 'html';
+                    else if (fileExtension === 'css') editorType = 'css';
+                    else if (['js', 'javascript'].includes(fileExtension)) editorType = 'js';
+                    else if (fileExtension === 'py') editorType = 'python';
+                    else if (fileExtension === 'php') editorType = 'php';
+                    
+                    // Activate the appropriate tab
+                    editorTabs.forEach(tab => {
+                        if (tab.getAttribute('data-tab') === editorType) {
+                            tab.click();
+                        }
+                    });
+                    
+                    // Set the content in the active editor
+                    const activeEditor = document.querySelector(`.${editorType}-editor .code-area`);
+                    if (activeEditor) {
+                        activeEditor.value = content;
+                        activeEditor.setAttribute('data-filename', name);
+                        console.log(`Editing file: ${name}`);
+                        showSuccessMessage(`Now editing: ${name}`);
+                    }
+                } catch (error) {
+                    console.error('Error editing uploaded file:', error);
+                    showErrorMessage('Failed to edit file: ' + error.message);
+                }
+            }
+            
+            function deleteUploadedFile(name, element) {
+                try {
+                    if (confirm(`Are you sure you want to delete ${name}?`)) {
+                        // Remove from DOM
+                        element.remove();
+                        
+                        // Remove from localStorage
+                        localStorage.removeItem(`supremeamer_file_${name}`);
+                        
+                        // Update saved files list
+                        const uploadedFiles = JSON.parse(localStorage.getItem('supremeamer_uploaded_files') || '[]');
+                        const updatedFiles = uploadedFiles.filter(file => file.name !== name);
+                        localStorage.setItem('supremeamer_uploaded_files', JSON.stringify(updatedFiles));
+                        
+                        console.log(`Deleted file: ${name}`);
+                        showSuccessMessage(`File deleted: ${name}`);
+                    }
+                } catch (error) {
+                    console.error('Error deleting uploaded file:', error);
+                    showErrorMessage('Failed to delete file: ' + error.message);
                 }
             }
 
@@ -1805,68 +2049,193 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 });
             });
 
+            // File item click handling
+            fileItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const fileName = this.getAttribute('data-file');
+                    if (fileName) {
+                        fileItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Load file content if available
+                        const fileContent = localStorage.getItem(`supremeamer_file_${fileName}`);
+                        if (fileContent) {
+                            const fileExtension = fileName.split('.').pop().toLowerCase();
+                            let editorType = 'js';
+                            
+                            if (fileExtension === 'html') editorType = 'html';
+                            else if (fileExtension === 'css') editorType = 'css';
+                            else if (['js', 'javascript'].includes(fileExtension)) editorType = 'js';
+                            else if (fileExtension === 'py') editorType = 'python';
+                            else if (fileExtension === 'php') editorType = 'php';
+                            
+                            // Activate the appropriate tab
+                            editorTabs.forEach(tab => {
+                                if (tab.getAttribute('data-tab') === editorType) {
+                                    tab.click();
+                                }
+                            });
+                            
+                            // Set the content in the active editor
+                            const activeEditor = document.querySelector(`.${editorType}-editor .code-area`);
+                            if (activeEditor) {
+                                activeEditor.value = fileContent;
+                                activeEditor.setAttribute('data-filename', fileName);
+                            }
+                        }
+                    }
+                });
+            });
+
             // Git Integration Functions
             gitInitBtn.addEventListener('click', function() {
-                console.log('Initializing Git repository...');
-                // Simulate Git init
-                setTimeout(() => {
-                    currentBranch.textContent = 'main';
-                    gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>Initialized empty Git repository</span></div>';
-                    console.log('Git repository initialized successfully.');
-                }, 500);
+                try {
+                    console.log('Initializing Git repository...');
+                    // Simulate Git init
+                    setTimeout(() => {
+                        currentBranch.textContent = 'main';
+                        gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>Initialized empty Git repository</span></div>';
+                        console.log('Git repository initialized successfully.');
+                        showSuccessMessage('Git repository initialized successfully.');
+                    }, 500);
+                } catch (error) {
+                    console.error('Error initializing Git repository:', error);
+                    showErrorMessage('Failed to initialize Git repository: ' + error.message);
+                }
             });
 
             gitStatusBtn.addEventListener('click', function() {
-                console.log('Checking Git status...');
-                // Simulate Git status
-                const statusItems = [
-                    { status: 'modified', file: 'index.html' },
-                    { status: 'untracked', file: 'style.css' },
-                    { status: 'added', file: 'script.js' }
-                ];
-                
-                gitStatus.innerHTML = '';
-                statusItems.forEach(item => {
-                    const statusItem = document.createElement('div');
-                    statusItem.classList.add('git-status-item');
-                    statusItem.innerHTML = `<span class="git-icon-${item.status}"></span><span>${item.file} (${item.status})</span>`;
-                    gitStatus.appendChild(statusItem);
-                });
-                
-                console.log('Git status retrieved successfully.');
+                try {
+                    console.log('Checking Git status...');
+                    // Simulate Git status
+                    const statusItems = [
+                        { status: 'modified', file: 'index.html' },
+                        { status: 'untracked', file: 'style.css' },
+                        { status: 'added', file: 'script.js' }
+                    ];
+                    
+                    gitStatus.innerHTML = '';
+                    statusItems.forEach(item => {
+                        const statusItem = document.createElement('div');
+                        statusItem.classList.add('git-status-item');
+                        statusItem.innerHTML = `<span class="git-icon-${item.status}"></span><span>${item.file} (${item.status})</span>`;
+                        gitStatus.appendChild(statusItem);
+                    });
+                    
+                    console.log('Git status retrieved successfully.');
+                    showSuccessMessage('Git status retrieved successfully.');
+                } catch (error) {
+                    console.error('Error checking Git status:', error);
+                    showErrorMessage('Failed to check Git status: ' + error.message);
+                }
+            });
+
+            gitAddBtn.addEventListener('click', function() {
+                try {
+                    console.log('Adding all files to Git...');
+                    // Simulate Git add
+                    setTimeout(() => {
+                        gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-added"></span><span>All changes staged for commit</span></div>';
+                        console.log('All files added to Git successfully.');
+                        showSuccessMessage('All files added to Git successfully.');
+                    }, 500);
+                } catch (error) {
+                    console.error('Error adding files to Git:', error);
+                    showErrorMessage('Failed to add files to Git: ' + error.message);
+                }
             });
 
             gitCommitBtn.addEventListener('click', function() {
-                const message = gitCommitMessage.value.trim();
-                if (!message) {
-                    console.error('Please enter a commit message.');
-                    return;
+                try {
+                    const message = gitCommitMessage.value.trim();
+                    if (!message) {
+                        throw new Error('Please enter a commit message.');
+                    }
+                    
+                    console.log(`Committing changes with message: "${message}"`);
+                    // Simulate Git commit
+                    setTimeout(() => {
+                        gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>No changes to commit</span></div>';
+                        gitCommitMessage.value = '';
+                        console.log('Changes committed successfully.');
+                        showSuccessMessage('Changes committed successfully.');
+                    }, 500);
+                } catch (error) {
+                    console.error('Error committing changes:', error);
+                    showErrorMessage('Failed to commit changes: ' + error.message);
                 }
-                
-                console.log(`Committing changes with message: "${message}"`);
-                // Simulate Git commit
-                setTimeout(() => {
-                    gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>No changes to commit</span></div>';
-                    gitCommitMessage.value = '';
-                    console.log('Changes committed successfully.');
-                }, 500);
             });
 
             gitPushBtn.addEventListener('click', function() {
-                console.log('Pushing to remote repository...');
-                // Simulate Git push
-                setTimeout(() => {
-                    console.log('Changes pushed to remote repository successfully.');
-                }, 1000);
+                try {
+                    console.log('Pushing to remote repository...');
+                    // Simulate Git push
+                    setTimeout(() => {
+                        console.log('Changes pushed to remote repository successfully.');
+                        showSuccessMessage('Changes pushed to remote repository successfully.');
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error pushing to remote repository:', error);
+                    showErrorMessage('Failed to push to remote repository: ' + error.message);
+                }
             });
 
             gitPullBtn.addEventListener('click', function() {
-                console.log('Pulling from remote repository...');
-                // Simulate Git pull
-                setTimeout(() => {
-                    console.log('Changes pulled from remote repository successfully.');
-                }, 1000);
+                try {
+                    console.log('Pulling from remote repository...');
+                    // Simulate Git pull
+                    setTimeout(() => {
+                        console.log('Changes pulled from remote repository successfully.');
+                        showSuccessMessage('Changes pulled from remote repository successfully.');
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error pulling from remote repository:', error);
+                    showErrorMessage('Failed to pull from remote repository: ' + error.message);
+                }
             });
+
+            // Utility functions for messages
+            function showErrorMessage(message) {
+                // Remove any existing error messages
+                const existingErrors = document.querySelectorAll('.error-message');
+                existingErrors.forEach(error => error.remove());
+                
+                const errorElement = document.createElement('div');
+                errorElement.classList.add('error-message');
+                errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+                
+                // Insert after the header
+                const header = document.querySelector('header');
+                header.parentNode.insertBefore(errorElement, header.nextSibling);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (errorElement.parentNode) {
+                        errorElement.parentNode.removeChild(errorElement);
+                    }
+                }, 5000);
+            }
+            
+            function showSuccessMessage(message) {
+                // Remove any existing success messages
+                const existingSuccess = document.querySelectorAll('.success-message');
+                existingSuccess.forEach(success => success.remove());
+                
+                const successElement = document.createElement('div');
+                successElement.classList.add('success-message');
+                successElement.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+                
+                // Insert after the header
+                const header = document.querySelector('header');
+                header.parentNode.insertBefore(successElement, header.nextSibling);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (successElement.parentNode) {
+                        successElement.parentNode.removeChild(successElement);
+                    }
+                }, 5000);
+            }
 
             // Load saved code from localStorage
             if (localStorage.getItem('supremeamer_html')) {
@@ -1875,6 +2244,12 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 jsCode.value = localStorage.getItem('supremeamer_js');
                 console.log('Previously saved code loaded!');
             }
+            
+            // Load uploaded files from localStorage
+            const uploadedFiles = JSON.parse(localStorage.getItem('supremeamer_uploaded_files') || '[]');
+            uploadedFiles.forEach(file => {
+                addUploadedFile(file.name, file.content);
+            });
 
             // Run code on initial load
             runCode();
@@ -1882,6 +2257,11 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
             // Add event listeners for Ctrl+S and Ctrl+Enter to run code
             document.addEventListener('keydown', function(e) {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    saveBtn.click();
+                }
+                
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault();
                     runCode();
                 }
@@ -1911,4 +2291,3 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
     </script>
 </body>
 </html>
-3

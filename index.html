@@ -729,6 +729,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .pdf-toolbar button {
@@ -762,6 +763,7 @@
         
         .pdf-canvas {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            max-width: 100%;
         }
         
         .pdf-sidebar {
@@ -846,6 +848,159 @@
             display: flex;
             flex: 1;
             overflow: hidden;
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                height: 97vh;
+                padding: 5px;
+            }
+            
+            header {
+                padding: 8px 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                gap: 5px;
+            }
+            
+            button {
+                padding: 6px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .pdf-toolbar {
+                padding: 8px;
+                gap: 5px;
+            }
+            
+            .pdf-toolbar button {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .pdf-page-controls {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                order: -1;
+                margin-bottom: 8px;
+            }
+            
+            .pdf-viewport {
+                padding: 10px;
+            }
+            
+            .preview-header {
+                padding: 8px 10px;
+            }
+            
+            .preview-controls button {
+                padding: 4px 6px;
+                font-size: 0.7rem;
+            }
+            
+            .output-container {
+                height: 120px;
+            }
+            
+            .output-header {
+                padding: 8px 10px;
+            }
+            
+            #console-output {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .console-timestamp {
+                font-size: 0.7rem;
+            }
+            
+            footer {
+                padding: 8px;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 4px 6px;
+                font-size: 0.7rem;
+            }
+            
+            button i {
+                margin-right: 2px;
+            }
+            
+            .pdf-toolbar {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .pdf-toolbar button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pdf-page-controls {
+                order: 0;
+            }
+            
+            .preview-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .preview-controls button {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+        
+        /* Swipe gestures for mobile */
+        .pdf-viewport {
+            touch-action: pan-y pinch-zoom;
+        }
+        
+        /* Improved mobile navigation */
+        .mobile-pdf-nav {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            justify-content: center;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-pdf-nav {
+                display: flex;
+            }
+            
+            .mobile-nav-btn {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: var(--secondary);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            }
         }
     </style>
 </head>
@@ -1226,6 +1381,16 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         </div>
     </div>
     
+    <!-- Mobile PDF Navigation -->
+    <div class="mobile-pdf-nav">
+        <button class="mobile-nav-btn" id="mobile-prev">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="mobile-nav-btn" id="mobile-next">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+    
     <footer>
         <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
     </footer>
@@ -1292,6 +1457,8 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const closePdfSidebar = document.getElementById('close-pdf-sidebar');
             const pdfList = document.getElementById('pdf-list');
             const pdfThumbnails = document.getElementById('pdf-thumbnails');
+            const mobilePrevBtn = document.getElementById('mobile-prev');
+            const mobileNextBtn = document.getElementById('mobile-next');
             
             // PDF-related variables
             let pdfDocs = [];
@@ -1932,6 +2099,19 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     renderPage(pageNum);
                 }
             }
+            
+            // Mobile navigation buttons
+            mobilePrevBtn.addEventListener('click', function() {
+                if (currentPage <= 1) return;
+                currentPage--;
+                renderPage(currentPage);
+            });
+            
+            mobileNextBtn.addEventListener('click', function() {
+                if (currentPage >= currentPdf.doc.numPages) return;
+                currentPage++;
+                renderPage(currentPage);
+            });
             
             // Theme toggle
             themeToggle.addEventListener('click', function() {

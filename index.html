@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SupremeAmer IDE Pro - Enhanced</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
@@ -313,18 +314,9 @@
             font-size: 0.95rem;
         }
         
-        .code-area {
+        .monaco-editor-container {
             flex: 1;
-            padding: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            resize: none;
-            border: none;
-            outline: none;
-            line-height: 1.5;
-            tab-size: 4;
-            -moz-tab-size: 4;
-            overflow: auto;
+            overflow: hidden;
         }
         
         .preview {
@@ -615,6 +607,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
         }
         
         .close-modal {
@@ -687,11 +681,6 @@
         
         .dark-mode .file-item.active {
             background: #4a5153;
-        }
-        
-        .dark-mode .code-area {
-            background: #2d3436;
-            color: #f1f2f6;
         }
         
         .dark-mode .editor-header, .dark-mode .preview-header, .dark-mode .output-header, .dark-mode .editor-tabs {
@@ -890,6 +879,35 @@
             margin: 10px 0;
         }
         
+        /* Git Repository Modal */
+        .git-repo-modal .modal-content {
+            max-width: 600px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4a69bd;
+            box-shadow: 0 0 0 2px rgba(74, 105, 189, 0.2);
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -1082,6 +1100,9 @@
                         <button class="git-action-btn" id="git-pull-btn">
                             <i class="fas fa-download"></i> Pull
                         </button>
+                        <button class="git-action-btn" id="git-repo-btn">
+                            <i class="fas fa-cloud"></i> Connect Repo
+                        </button>
                     </div>
                     
                     <textarea class="git-commit-message" id="git-commit-message" placeholder="Commit message..."></textarea>
@@ -1168,159 +1189,37 @@
                                 <div class="theme-selector">
                                     <label for="theme">Theme:</label>
                                     <select id="theme">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="monokai">Monokai</option>
+                                        <option value="vs">Light</option>
+                                        <option value="vs-dark">Dark</option>
+                                        <option value="hc-black">High Contrast</option>
                                     </select>
                                 </div>
                             </div>
-                            <textarea class="code-area" id="html-code" placeholder="Write your HTML here...">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;SupremeAmer App&lt;/title&gt;
-    &lt;style&gt;
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            text-align: center;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        button {
-            background-color: #4a69bd;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background-color: #3c5aa6;
-            transform: scale(1.05);
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;h1&gt;Welcome to SupremeAmer&lt;/h1&gt;
-        &lt;p&gt;This is a sample application built with our Web IDE&lt;/p&gt;
-        &lt;button onclick="showMessage()"&gt;Click Me!&lt;/button&gt;
-        &lt;div id="output"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</textarea>
+                            <div id="html-editor" class="monaco-editor-container"></div>
                         </div>
                         <div class="code-editor css-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS</span>
                             </div>
-                            <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
-
-.container {
-    transition: all 0.3s ease;
-}
-
-#output {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    min-height: 50px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        margin: 20px;
-    }
-    
-    .container {
-        padding: 15px;
-    }
-}</textarea>
+                            <div id="css-editor" class="monaco-editor-container"></div>
                         </div>
                         <div class="code-editor js-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript</span>
                             </div>
-                            <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
-
-function showMessage() {
-    const output = document.getElementById('output');
-    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
-    output.style.backgroundColor = '#e8f5e9';
-    
-    // Also log to console
-    console.log('Button clicked! Message displayed.');
-}
-
-// Additional demo function
-function calculate(a, b) {
-    return a + b;
-}
-
-// Display initial message
-console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));</textarea>
+                            <div id="js-editor" class="monaco-editor-container"></div>
                         </div>
                         <div class="code-editor python-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-python" style="color: var(--python);"></i> Python</span>
                             </div>
-                            <textarea class="code-area" id="python-code" placeholder="Write your Python here..."># Python code example
-
-def welcome_message():
-    return "Hello from Python in SupremeAmer IDE!"
-
-def calculate(a, b):
-    return a + b
-
-# Main execution
-if __name__ == "__main__":
-    print(welcome_message())
-    print("5 + 3 =", calculate(5, 3))
-    
-    # Demonstrate list comprehension
-    numbers = [1, 2, 3, 4, 5]
-    squares = [x**2 for x in numbers]
-    print("Squares:", squares)</textarea>
+                            <div id="python-editor" class="monaco-editor-container"></div>
                         </div>
                         <div class="code-editor php-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-php" style="color: var(--php);"></i> PHP</span>
                             </div>
-                            <textarea class="code-area" id="php-code" placeholder="Write your PHP here...">&lt;?php
-
-// PHP code example
-function welcomeMessage() {
-    return "Hello from PHP in SupremeAmer IDE!";
-}
-
-function calculate($a, $b) {
-    return $a + $b;
-}
-
-// Main execution
-echo welcomeMessage() . "\n";
-echo "5 + 3 = " . calculate(5, 3) . "\n";
-
-// Demonstrate array manipulation
-$numbers = [1, 2, 3, 4, 5];
-$squares = array_map(function($x) { return $x * $x; }, $numbers);
-echo "Squares: " . implode(", ", $squares) . "\n";
-?&gt;</textarea>
+                            <div id="php-editor" class="monaco-editor-container"></div>
                         </div>
                     </div>
                 </div>
@@ -1360,6 +1259,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
         </footer>
 
+        <!-- Upload Modal -->
         <div class="modal" id="upload-modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1385,16 +1285,223 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 </div>
             </div>
         </div>
+
+        <!-- Git Repository Modal -->
+        <div class="modal git-repo-modal" id="git-repo-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Connect to Git Repository</h3>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="form-group">
+                    <label for="repo-url">Repository URL</label>
+                    <input type="text" id="repo-url" class="form-control" placeholder="https://github.com/username/repository.git">
+                </div>
+                <div class="form-group">
+                    <label for="repo-username">Username</label>
+                    <input type="text" id="repo-username" class="form-control" placeholder="Your username">
+                </div>
+                <div class="form-group">
+                    <label for="repo-token">Access Token/Password</label>
+                    <input type="password" id="repo-token" class="form-control" placeholder="Your access token or password">
+                </div>
+                <div class="form-group">
+                    <label for="repo-branch">Branch</label>
+                    <input type="text" id="repo-branch" class="form-control" placeholder="main" value="main">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="save-btn" id="connect-repo">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                    <button class="reset-btn" id="cancel-repo">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Monaco Editor
+            require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
+            
+            // Store editor instances
+            let editors = {};
+            let currentTheme = 'vs';
+            
+            require(['vs/editor/editor.main'], function() {
+                // Initialize editors for each language
+                editors.html = monaco.editor.create(document.getElementById('html-editor'), {
+                    value: `<!DOCTYPE html>
+<html>
+<head>
+    <title>SupremeAmer App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #3c5aa6;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to SupremeAmer</h1>
+        <p>This is a sample application built with our Web IDE</p>
+        <button onclick="showMessage()">Click Me!</button>
+        <div id="output"></div>
+    </div>
+</body>
+</html>`,
+                    language: 'html',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
+                
+                editors.css = monaco.editor.create(document.getElementById('css-editor'), {
+                    value: `/* Additional CSS styles */
+
+.container {
+    transition: all 0.3s ease;
+}
+
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    min-height: 50px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        margin: 20px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+}`,
+                    language: 'css',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
+                
+                editors.js = monaco.editor.create(document.getElementById('js-editor'), {
+                    value: `// JavaScript code
+
+function showMessage() {
+    const output = document.getElementById('output');
+    output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
+    output.style.backgroundColor = '#e8f5e9';
+    
+    // Also log to console
+    console.log('Button clicked! Message displayed.');
+}
+
+// Additional demo function
+function calculate(a, b) {
+    return a + b;
+}
+
+// Display initial message
+console.log('Welcome to SupremeAmer Web IDE!');
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`,
+                    language: 'javascript',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
+                
+                editors.python = monaco.editor.create(document.getElementById('python-editor'), {
+                    value: `# Python code example
+
+def welcome_message():
+    return "Hello from Python in SupremeAmer IDE!"
+
+def calculate(a, b):
+    return a + b
+
+# Main execution
+if __name__ == "__main__":
+    print(welcome_message())
+    print("5 + 3 =", calculate(5, 3))
+    
+    # Demonstrate list comprehension
+    numbers = [1, 2, 3, 4, 5]
+    squares = [x**2 for x in numbers]
+    print("Squares:", squares)`,
+                    language: 'python',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
+                
+                editors.php = monaco.editor.create(document.getElementById('php-editor'), {
+                    value: `<?php
+
+// PHP code example
+function welcomeMessage() {
+    return "Hello from PHP in SupremeAmer IDE!";
+}
+
+function calculate($a, $b) {
+    return $a + $b;
+}
+
+// Main execution
+echo welcomeMessage() . "\\n";
+echo "5 + 3 = " . calculate(5, 3) . "\\n";
+
+// Demonstrate array manipulation
+$numbers = [1, 2, 3, 4, 5];
+$squares = array_map(function($x) { return $x * $x; }, $numbers);
+echo "Squares: " . implode(", ", $squares) . "\\n";
+?>`,
+                    language: 'php',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
+                
+                // Set theme change handler
+                document.getElementById('theme').addEventListener('change', function() {
+                    currentTheme = this.value;
+                    monaco.editor.setTheme(currentTheme);
+                });
+            });
+            
             // DOM elements
-            const htmlCode = document.getElementById('html-code');
-            const cssCode = document.getElementById('css-code');
-            const jsCode = document.getElementById('js-code');
-            const pythonCode = document.getElementById('python-code');
-            const phpCode = document.getElementById('php-code');
             const previewFrame = document.getElementById('preview-frame');
             const consoleOutput = document.getElementById('console-output');
             const runBtn = document.getElementById('run-btn');
@@ -1412,7 +1519,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const closeSidebar = document.getElementById('close-sidebar');
             const uploadBtn = document.getElementById('upload-btn');
             const uploadModal = document.getElementById('upload-modal');
-            const closeModal = document.querySelector('.close-modal');
+            const closeModal = document.querySelectorAll('.close-modal');
             const dropZones = document.querySelectorAll('.drop-zone');
             const fileUpload = document.getElementById('file-upload');
             const themeToggle = document.getElementById('theme-toggle');
@@ -1427,6 +1534,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const gitCommitBtn = document.getElementById('git-commit-btn');
             const gitPushBtn = document.getElementById('git-push-btn');
             const gitPullBtn = document.getElementById('git-pull-btn');
+            const gitRepoBtn = document.getElementById('git-repo-btn');
             const gitCommitMessage = document.getElementById('git-commit-message');
             const gitStatus = document.getElementById('git-status');
             const currentBranch = document.getElementById('current-branch');
@@ -1434,6 +1542,11 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             // File elements
             const uploadedFilesContainer = document.getElementById('uploaded-files');
             const fileItems = document.querySelectorAll('.file-item');
+            
+            // Git repo modal elements
+            const gitRepoModal = document.getElementById('git-repo-modal');
+            const connectRepoBtn = document.getElementById('connect-repo');
+            const cancelRepoBtn = document.getElementById('cancel-repo');
 
             // Store original console methods
             const originalConsole = {
@@ -1490,9 +1603,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             }
 
             function runCode() {
-                const html = htmlCode.value;
-                const css = cssCode.value;
-                const js = jsCode.value;
+                const html = editors.html.getValue();
+                const css = editors.css.getValue();
+                const js = editors.js.getValue();
 
                 // Clear console
                 consoleOutput.innerHTML = '';
@@ -1545,9 +1658,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             // Save code to localStorage
             saveBtn.addEventListener('click', function() {
                 try {
-                    localStorage.setItem('supremeamer_html', htmlCode.value);
-                    localStorage.setItem('supremeamer_css', cssCode.value);
-                    localStorage.setItem('supremeamer_js', jsCode.value);
+                    localStorage.setItem('supremeamer_html', editors.html.getValue());
+                    localStorage.setItem('supremeamer_css', editors.css.getValue());
+                    localStorage.setItem('supremeamer_js', editors.js.getValue());
                     
                     // Save uploaded files
                     const uploadedFiles = Array.from(uploadedFilesContainer.querySelectorAll('.uploaded-file')).map(file => {
@@ -1570,9 +1683,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             // Export code as HTML file
             exportBtn.addEventListener('click', function() {
                 try {
-                    const html = htmlCode.value;
-                    const css = cssCode.value;
-                    const js = jsCode.value;
+                    const html = editors.html.getValue();
+                    const css = editors.css.getValue();
+                    const js = editors.js.getValue();
 
                     const fullHtml = `<!DOCTYPE html>
 <html>
@@ -1605,7 +1718,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             resetBtn.addEventListener('click', function() {
                 if (confirm('Are you sure you want to reset all code? This cannot be undone.')) {
                     try {
-                        htmlCode.value = `<!DOCTYPE html>
+                        editors.html.setValue(`<!DOCTYPE html>
 <html>
 <head>
     <title>SupremeAmer App</title>
@@ -1651,9 +1764,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         <div id="output"></div>
     </div>
 </body>
-</html>`;
+</html>`);
 
-                        cssCode.value = `/* Additional CSS styles */
+                        editors.css.setValue(`/* Additional CSS styles */
 
 .container {
     transition: all 0.3s ease;
@@ -1676,9 +1789,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
     .container {
         padding: 15px;
     }
-}`;
+}`);
 
-                        jsCode.value = `// JavaScript code
+                        editors.js.setValue(`// JavaScript code
 
 function showMessage() {
     const output = document.getElementById('output');
@@ -1696,7 +1809,7 @@ function calculate(a, b) {
 
 // Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
-console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
+console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`);
 
                         // Clear uploaded files
                         uploadedFilesContainer.innerHTML = '';
@@ -1793,7 +1906,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     if (t.getAttribute('data-tab') === tabName) {
                         t.classList.add('active');
                     } else {
-                    t.classList.remove('active');
+                        t.classList.remove('active');
                     }
                 });
                 
@@ -1818,13 +1931,20 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 uploadModal.style.display = 'flex';
             });
 
-            closeModal.addEventListener('click', function() {
-                uploadModal.style.display = 'none';
+            // Close modals
+            closeModal.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    uploadModal.style.display = 'none';
+                    gitRepoModal.style.display = 'none';
+                });
             });
 
             window.addEventListener('click', function(e) {
                 if (e.target === uploadModal) {
                     uploadModal.style.display = 'none';
+                }
+                if (e.target === gitRepoModal) {
+                    gitRepoModal.style.display = 'none';
                 }
             });
 
@@ -1973,13 +2093,9 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     });
                     
                     // Set the content in the active editor
-                    const activeEditor = document.querySelector(`.${editorType}-editor .code-area`);
-                    if (activeEditor) {
-                        activeEditor.value = content;
-                        activeEditor.setAttribute('data-filename', name);
-                        console.log(`Editing file: ${name}`);
-                        showSuccessMessage(`Now editing: ${name}`);
-                    }
+                    editors[editorType].setValue(content);
+                    console.log(`Editing file: ${name}`);
+                    showSuccessMessage(`Now editing: ${name}`);
                 } catch (error) {
                     console.error('Error editing uploaded file:', error);
                     showErrorMessage('Failed to edit file: ' + error.message);
@@ -2014,8 +2130,10 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
                     themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+                    monaco.editor.setTheme('vs-dark');
                 } else {
                     themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
+                    monaco.editor.setTheme('vs');
                 }
             });
 
@@ -2077,11 +2195,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                             });
                             
                             // Set the content in the active editor
-                            const activeEditor = document.querySelector(`.${editorType}-editor .code-area`);
-                            if (activeEditor) {
-                                activeEditor.value = fileContent;
-                                activeEditor.setAttribute('data-filename', fileName);
-                            }
+                            editors[editorType].setValue(fileContent);
                         }
                     }
                 });
@@ -2194,6 +2308,40 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 }
             });
 
+            // Git repo connection
+            gitRepoBtn.addEventListener('click', function() {
+                gitRepoModal.style.display = 'flex';
+            });
+
+            cancelRepoBtn.addEventListener('click', function() {
+                gitRepoModal.style.display = 'none';
+            });
+
+            connectRepoBtn.addEventListener('click', function() {
+                try {
+                    const repoUrl = document.getElementById('repo-url').value;
+                    const username = document.getElementById('repo-username').value;
+                    const token = document.getElementById('repo-token').value;
+                    const branch = document.getElementById('repo-branch').value || 'main';
+                    
+                    if (!repoUrl || !username || !token) {
+                        throw new Error('Please fill in all required fields.');
+                    }
+                    
+                    console.log(`Connecting to repository: ${repoUrl}`);
+                    // Simulate repository connection
+                    setTimeout(() => {
+                        currentBranch.textContent = branch;
+                        gitRepoModal.style.display = 'none';
+                        console.log('Successfully connected to repository.');
+                        showSuccessMessage('Successfully connected to repository.');
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error connecting to repository:', error);
+                    showErrorMessage('Failed to connect to repository: ' + error.message);
+                }
+            });
+
             // Utility functions for messages
             function showErrorMessage(message) {
                 // Remove any existing error messages
@@ -2239,9 +2387,9 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
 
             // Load saved code from localStorage
             if (localStorage.getItem('supremeamer_html')) {
-                htmlCode.value = localStorage.getItem('supremeamer_html');
-                cssCode.value = localStorage.getItem('supremeamer_css');
-                jsCode.value = localStorage.getItem('supremeamer_js');
+                editors.html.setValue(localStorage.getItem('supremeamer_html'));
+                editors.css.setValue(localStorage.getItem('supremeamer_css'));
+                editors.js.setValue(localStorage.getItem('supremeamer_js'));
                 console.log('Previously saved code loaded!');
             }
             
@@ -2276,8 +2424,8 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
             function handleMobileView() {
                 if (window.innerWidth < 768) {
                     // Mobile-specific adjustments
-                    document.querySelectorAll('.code-area').forEach(area => {
-                        area.style.fontSize = '16px'; // Prevent zoom on iOS
+                    document.querySelectorAll('.monaco-editor-container').forEach(editor => {
+                        editor.style.fontSize = '16px'; // Prevent zoom on iOS
                     });
                 }
             }

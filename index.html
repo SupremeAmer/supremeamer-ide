@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SupremeAmer Web IDE Pro</title>
+    <title>SupremeAmer IDE Pro - Enhanced</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         :root {
             --primary: #2c3e50;
@@ -34,6 +29,10 @@
             --go: #00add8;
             --rust: #000000;
             --sidebar-width: 250px;
+            --git-added: #28a745;
+            --git-modified: #ffc107;
+            --git-deleted: #dc3545;
+            --git-untracked: #6f42c1;
         }
         
         body {
@@ -148,6 +147,15 @@
         
         .upload-btn:hover {
             background-color: #7d3c98;
+        }
+        
+        .git-btn {
+            background-color: #f1502f;
+            color: white;
+        }
+        
+        .git-btn:hover {
+            background-color: #d03b1c;
         }
         
         .main-content {
@@ -686,10 +694,7 @@
             color: #f1f2f6;
         }
         
-        .dark-mode .editor-header,
-        .dark-mode .preview-header,
-        .dark-mode .output-header,
-        .dark-mode .editor-tabs {
+        .dark-mode .editor-header, .dark-mode .preview-header, .dark-mode .output-header, .dark-mode .editor-tabs {
             background: #3c4345;
             color: #f1f2f6;
         }
@@ -705,6 +710,119 @@
         
         .dark-mode .mobile-tab.active {
             background: var(--secondary);
+        }
+        
+        /* Git Integration Styles */
+        .git-panel {
+            border-top: 1px solid #ddd;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .git-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .git-branch {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .git-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .git-action-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .git-status {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            background: white;
+        }
+        
+        .git-status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .git-status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .git-status-added {
+            color: var(--git-added);
+        }
+        
+        .git-status-modified {
+            color: var(--git-modified);
+        }
+        
+        .git-status-deleted {
+            color: var(--git-deleted);
+        }
+        
+        .git-status-untracked {
+            color: var(--git-untracked);
+        }
+        
+        .git-commit-message {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+        
+        /* Git Icon Indicators */
+        .git-icon-added::before {
+            content: "•";
+            color: var(--git-added);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .git-icon-modified::before {
+            content: "•";
+            color: var(--git-modified);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .git-icon-deleted::before {
+            content: "•";
+            color: var(--git-deleted);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .git-icon-untracked::before {
+            content: "•";
+            color: var(--git-untracked);
+            font-weight: bold;
+            margin-right: 5px;
         }
         
         /* Responsive adjustments */
@@ -761,6 +879,16 @@
                 font-size: 0.75rem;
                 margin-top: 3px;
             }
+            
+            .git-actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .git-action-btn {
+                flex: 1;
+                min-width: 120px;
+            }
         }
     </style>
 </head>
@@ -781,6 +909,9 @@
                 <button class="save-btn" id="save-btn">
                     <i class="fas fa-save"></i> Save
                 </button>
+                <button class="git-btn" id="git-btn">
+                    <i class="fab fa-git-alt"></i> Git
+                </button>
                 <button class="upload-btn" id="upload-btn">
                     <i class="fas fa-upload"></i> Upload
                 </button>
@@ -795,7 +926,7 @@
                 </button>
             </div>
         </header>
-        
+
         <div class="main-content">
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
@@ -804,7 +935,6 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
                 <div class="file-explorer">
                     <div class="collapsible">
                         <span>Project Files</span>
@@ -813,16 +943,13 @@
                     <div class="collapsible-content">
                         <div class="file-tree">
                             <div class="file-item active">
-                                <i class="fab fa-html5" style="color: var(--html);"></i>
-                                index.html
+                                <i class="fab fa-html5" style="color: var(--html);"></i> index.html
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-css3-alt" style="color: var(--css);"></i>
-                                style.css
+                                <i class="fab fa-css3-alt" style="color: var(--css);"></i> style.css
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                script.js
+                                <i class="fab fa-js-square" style="color: var(--js);"></i> script.js
                             </div>
                             <div class="collapsible">
                                 <span><i class="fas fa-folder"></i> Assets</span>
@@ -831,22 +958,18 @@
                             <div class="collapsible-content">
                                 <div class="file-tree" id="assets-folder">
                                     <div class="file-item">
-                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                                        documentation.pdf
+                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i> documentation.pdf
                                     </div>
                                     <div class="file-item">
-                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                                        tutorial.pdf
+                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i> tutorial.pdf
                                     </div>
                                 </div>
                             </div>
                             <div class="file-item">
-                                <i class="fas fa-folder"></i>
-                                components
+                                <i class="fas fa-folder"></i> components
                             </div>
                         </div>
                     </div>
-                    
                     <div class="collapsible">
                         <span>External Libraries</span>
                         <i class="fas fa-chevron-down"></i>
@@ -854,17 +977,51 @@
                     <div class="collapsible-content">
                         <div class="file-tree">
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                react.js
+                                <i class="fab fa-js-square" style="color: var(--js);"></i> react.js
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                vue.js
+                                <i class="fab fa-js-square" style="color: var(--js);"></i> vue.js
                             </div>
                             <div class="file-item">
-                                <i class="fab fa-js-square" style="color: var(--js);"></i>
-                                jquery.js
+                                <i class="fab fa-js-square" style="color: var(--js);"></i> jquery.js
                             </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Git Integration Panel -->
+                <div class="git-panel">
+                    <div class="git-header">
+                        <div class="git-branch">
+                            <i class="fas fa-code-branch"></i>
+                            <span id="current-branch">main</span>
+                        </div>
+                        <button class="git-btn git-action-btn" id="git-init">
+                            <i class="fas fa-plus"></i> Init
+                        </button>
+                    </div>
+                    
+                    <div class="git-actions">
+                        <button class="git-action-btn" id="git-status-btn">
+                            <i class="fas fa-list"></i> Status
+                        </button>
+                        <button class="git-action-btn" id="git-commit-btn">
+                            <i class="fas fa-check"></i> Commit
+                        </button>
+                        <button class="git-action-btn" id="git-push-btn">
+                            <i class="fas fa-upload"></i> Push
+                        </button>
+                        <button class="git-action-btn" id="git-pull-btn">
+                            <i class="fas fa-download"></i> Pull
+                        </button>
+                    </div>
+                    
+                    <textarea class="git-commit-message" id="git-commit-message" placeholder="Commit message..."></textarea>
+                    
+                    <div class="git-status" id="git-status">
+                        <div class="git-status-item">
+                            <span class="git-icon-untracked"></span>
+                            <span>No changes detected</span>
                         </div>
                     </div>
                 </div>
@@ -878,7 +1035,7 @@
                     <input type="file" id="file-upload" class="file-input" multiple webkitdirectory>
                 </div>
             </div>
-            
+
             <div class="editor-container">
                 <div class="code-editors">
                     <select class="language-select" id="language-select">
@@ -893,7 +1050,6 @@
                         <option value="cpp">C++</option>
                         <option value="swift">Swift</option>
                     </select>
-                    
                     <div class="editor-tabs">
                         <div class="editor-tab active" data-tab="html">
                             <i class="fab fa-html5" style="color: var(--html);"></i> HTML
@@ -911,7 +1067,6 @@
                             <i class="fab fa-php" style="color: var(--php);"></i> PHP
                         </div>
                     </div>
-                    
                     <div class="mobile-tabs">
                         <div class="mobile-tab active" data-tab="html">HTML</div>
                         <div class="mobile-tab" data-tab="css">CSS</div>
@@ -919,7 +1074,6 @@
                         <div class="mobile-tab" data-tab="python">Python</div>
                         <div class="mobile-tab" data-tab="php">PHP</div>
                     </div>
-                    
                     <div class="editor-content">
                         <div class="code-editor html-editor" style="display: flex;">
                             <div class="editor-header">
@@ -981,12 +1135,12 @@
 &lt;/body&gt;
 &lt;/html&gt;</textarea>
                         </div>
-                        
                         <div class="code-editor css-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-css3-alt" style="color: var(--css);"></i> CSS</span>
                             </div>
                             <textarea class="code-area" id="css-code" placeholder="Write your CSS here...">/* Additional CSS styles */
+
 .container {
     transition: all 0.3s ease;
 }
@@ -1010,12 +1164,12 @@
     }
 }</textarea>
                         </div>
-                        
                         <div class="code-editor js-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-js-square" style="color: var(--js);"></i> JavaScript</span>
                             </div>
                             <textarea class="code-area" id="js-code" placeholder="Write your JavaScript here...">// JavaScript code
+
 function showMessage() {
     const output = document.getElementById('output');
     output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
@@ -1034,12 +1188,12 @@ function calculate(a, b) {
 console.log('Welcome to SupremeAmer Web IDE!');
 console.log('Sample calculation: 5 + 3 =', calculate(5, 3));</textarea>
                         </div>
-                        
                         <div class="code-editor python-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-python" style="color: var(--python);"></i> Python</span>
                             </div>
                             <textarea class="code-area" id="python-code" placeholder="Write your Python here..."># Python code example
+
 def welcome_message():
     return "Hello from Python in SupremeAmer IDE!"
 
@@ -1056,12 +1210,12 @@ if __name__ == "__main__":
     squares = [x**2 for x in numbers]
     print("Squares:", squares)</textarea>
                         </div>
-                        
                         <div class="code-editor php-editor" style="display: none;">
                             <div class="editor-header">
                                 <span><i class="fab fa-php" style="color: var(--php);"></i> PHP</span>
                             </div>
-                            <textarea class="code-area" id="php-code" placeholder="Write your PHP here..."><?php
+                            <textarea class="code-area" id="php-code" placeholder="Write your PHP here...">&lt;?php
+
 // PHP code example
 function welcomeMessage() {
     return "Hello from PHP in SupremeAmer IDE!";
@@ -1079,13 +1233,13 @@ echo "5 + 3 = " . calculate(5, 3) . "\n";
 $numbers = [1, 2, 3, 4, 5];
 $squares = array_map(function($x) { return $x * $x; }, $numbers);
 echo "Squares: " . implode(", ", $squares) . "\n";
-?></textarea>
+?&gt;</textarea>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="resizer-horizontal" id="vertical-resizer"></div>
-                
+
                 <div class="preview">
                     <div class="preview-header">
                         <span><i class="fas fa-play-circle" style="color: var(--success);"></i> Live Preview</span>
@@ -1102,9 +1256,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 </div>
             </div>
         </div>
-        
+
         <div class="resizer" id="horizontal-resizer"></div>
-        
+
         <div class="output-container">
             <div class="output-header">
                 <span><i class="fas fa-terminal"></i> Console Output</span>
@@ -1114,34 +1268,34 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             </div>
             <div id="console-output"></div>
         </div>
-    </div>
-    
-    <footer>
-        <p>© 2023 SupremeAmer Application Development Organization. All rights reserved.</p>
-    </footer>
 
-    <div class="modal" id="upload-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Upload Files</h3>
-                <span class="close-modal">&times;</span>
-            </div>
-            <div class="drop-zone" id="modal-drop-zone">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop files or folders here</p>
-                <p>or click to browse</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" id="upload-progress"></div>
-            </div>
-            <p id="upload-status">Ready to upload...</p>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="save-btn" id="start-upload">
-                    <i class="fas fa-upload"></i> Start Upload
-                </button>
-                <button class="reset-btn" id="cancel-upload">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
+        <footer>
+            <p>© 2025 SupremeAmer Application Development Organization. All rights reserved.</p>
+        </footer>
+
+        <div class="modal" id="upload-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Upload Files</h3>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="drop-zone" id="modal-drop-zone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop files or folders here</p>
+                    <p>or click to browse</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="upload-progress"></div>
+                </div>
+                <p id="upload-status">Ready to upload...</p>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="save-btn" id="start-upload">
+                        <i class="fas fa-upload"></i> Start Upload
+                    </button>
+                    <button class="reset-btn" id="cancel-upload">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1178,6 +1332,17 @@ echo "Squares: " . implode(", ", $squares) . "\n";
             const deviceToggle = document.getElementById('device-toggle');
             const collapsibles = document.querySelectorAll('.collapsible');
             
+            // Git elements
+            const gitBtn = document.getElementById('git-btn');
+            const gitInitBtn = document.getElementById('git-init');
+            const gitStatusBtn = document.getElementById('git-status-btn');
+            const gitCommitBtn = document.getElementById('git-commit-btn');
+            const gitPushBtn = document.getElementById('git-push-btn');
+            const gitPullBtn = document.getElementById('git-pull-btn');
+            const gitCommitMessage = document.getElementById('git-commit-message');
+            const gitStatus = document.getElementById('git-status');
+            const currentBranch = document.getElementById('current-branch');
+
             // Store original console methods
             const originalConsole = {
                 log: console.log,
@@ -1185,28 +1350,28 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 warn: console.warn,
                 info: console.info
             };
-            
+
             // Override console methods to capture output
             console.log = function(...args) {
                 originalConsole.log.apply(console, args);
                 logToConsole(args, 'log');
             };
-            
+
             console.error = function(...args) {
                 originalConsole.error.apply(console, args);
                 logToConsole(args, 'error');
             };
-            
+
             console.warn = function(...args) {
                 originalConsole.warn.apply(console, args);
                 logToConsole(args, 'warn');
             };
-            
+
             console.info = function(...args) {
                 originalConsole.info.apply(console, args);
                 logToConsole(args, 'info');
             };
-            
+
             function logToConsole(args, type) {
                 const timestamp = new Date().toLocaleTimeString();
                 const message = args.map(arg => {
@@ -1215,7 +1380,7 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                     }
                     return arg;
                 }).join(' ');
-                
+
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('console-message', `console-${type}`);
                 
@@ -1225,24 +1390,23 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 
                 const contentElement = document.createElement('span');
                 contentElement.textContent = message;
-                
+
                 messageElement.appendChild(timestampElement);
                 messageElement.appendChild(contentElement);
-                
                 consoleOutput.appendChild(messageElement);
                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
             }
-            
+
             function runCode() {
                 const html = htmlCode.value;
                 const css = cssCode.value;
                 const js = jsCode.value;
-                
+
                 // Clear console
                 consoleOutput.innerHTML = '';
-                
+
                 const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
-                
+
                 // Write the code to the iframe
                 previewDocument.open();
                 previewDocument.write(`
@@ -1281,52 +1445,47 @@ echo "Squares: " . implode(", ", $squares) . "\n";
                 `);
                 previewDocument.close();
             }
-            
+
             // Run code on button click
             runBtn.addEventListener('click', runCode);
             refreshBtn.addEventListener('click', runCode);
-            
+
             // Save code to localStorage
             saveBtn.addEventListener('click', function() {
                 localStorage.setItem('supremeamer_html', htmlCode.value);
                 localStorage.setItem('supremeamer_css', cssCode.value);
                 localStorage.setItem('supremeamer_js', jsCode.value);
-                
                 console.log('Code saved successfully!');
             });
-            
+
             // Export code as HTML file
             exportBtn.addEventListener('click', function() {
                 const html = htmlCode.value;
                 const css = cssCode.value;
                 const js = jsCode.value;
-                
-                const fullHtml = `
-<!DOCTYPE html>
+
+                const fullHtml = `<!DOCTYPE html>
 <html>
 <head>
     <title>SupremeAmer App</title>
     <style>${css}</style>
 </head>
 <body>
-    ${html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')}
+    ${html.replace('</body></html>', '')}
     <script>${js}<\/script>
 </body>
 </html>`;
-                
+
                 const blob = new Blob([fullHtml], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
-                
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = 'supremeamer_app.html';
                 a.click();
-                
                 URL.revokeObjectURL(url);
-                
                 console.log('Code exported as HTML file!');
             });
-            
+
             // Reset code to default
             resetBtn.addEventListener('click', function() {
                 if (confirm('Are you sure you want to reset all code? This cannot be undone.')) {
@@ -1377,8 +1536,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
     </div>
 </body>
 </html>`;
-                    
+
                     cssCode.value = `/* Additional CSS styles */
+
 .container {
     transition: all 0.3s ease;
 }
@@ -1401,8 +1561,9 @@ echo "Squares: " . implode(", ", $squares) . "\n";
         padding: 15px;
     }
 }`;
-                    
+
                     jsCode.value = `// JavaScript code
+
 function showMessage() {
     const output = document.getElementById('output');
     output.innerHTML = '<p>Hello from SupremeAmer Web IDE! This code was executed successfully.</p>';
@@ -1420,17 +1581,17 @@ function calculate(a, b) {
 // Display initial message
 console.log('Welcome to SupremeAmer Web IDE!');
 console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
-                    
+
                     runCode();
                     console.log('Editor reset to default code!');
                 }
             });
-            
+
             // Clear console
             clearConsoleBtn.addEventListener('click', function() {
                 consoleOutput.innerHTML = '';
             });
-            
+
             // Tab switching for desktop
             editorTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -1459,7 +1620,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     document.querySelector(`.${tabName}-editor`).style.display = 'flex';
                 });
             });
-            
+
             // Tab switching for mobile tabs
             mobileTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -1488,7 +1649,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     document.querySelector(`.${tabName}-editor`).style.display = 'flex';
                 });
             });
-            
+
             // Language select change
             languageSelect.addEventListener('change', function() {
                 const tabName = this.value;
@@ -1517,61 +1678,60 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 });
                 document.querySelector(`.${tabName}-editor`).style.display = 'flex';
             });
-            
+
             // Sidebar toggle
             sidebarToggle.addEventListener('click', function() {
                 sidebar.classList.add('open');
             });
-            
+
             closeSidebar.addEventListener('click', function() {
                 sidebar.classList.remove('open');
             });
-            
+
             // Upload functionality
             uploadBtn.addEventListener('click', function() {
                 uploadModal.style.display = 'flex';
             });
-            
+
             closeModal.addEventListener('click', function() {
                 uploadModal.style.display = 'none';
             });
-            
+
             window.addEventListener('click', function(e) {
                 if (e.target === uploadModal) {
                     uploadModal.style.display = 'none';
                 }
             });
-            
+
             // File upload handling
             dropZones.forEach(zone => {
                 zone.addEventListener('click', function() {
                     fileUpload.click();
                 });
-                
+
                 zone.addEventListener('dragover', function(e) {
                     e.preventDefault();
                     this.style.borderColor = '#4a69bd';
                     this.style.background = '#f8f9fa';
                 });
-                
+
                 zone.addEventListener('dragleave', function() {
                     this.style.borderColor = '#ccc';
                     this.style.background = '';
                 });
-                
+
                 zone.addEventListener('drop', function(e) {
                     e.preventDefault();
                     this.style.borderColor = '#ccc';
                     this.style.background = '';
-                    
                     handleFiles(e.dataTransfer.files);
                 });
             });
-            
+
             fileUpload.addEventListener('change', function() {
                 handleFiles(this.files);
             });
-            
+
             function handleFiles(files) {
                 if (files.length > 0) {
                     console.log(`Processing ${files.length} files...`);
@@ -1604,22 +1764,20 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     }, 100);
                 }
             }
-            
+
             // Theme toggle
             themeToggle.addEventListener('click', function() {
                 document.body.classList.toggle('dark-mode');
-                
                 if (document.body.classList.contains('dark-mode')) {
                     themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
                 } else {
                     themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
                 }
             });
-            
+
             // Device preview toggle
             deviceToggle.addEventListener('click', function() {
                 const previewFrame = document.getElementById('preview-frame');
-                
                 if (previewFrame.style.width === '375px') {
                     previewFrame.style.width = '100%';
                     previewFrame.style.maxWidth = '100%';
@@ -1631,13 +1789,12 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     deviceToggle.innerHTML = '<i class="fas fa-desktop"></i> Desktop View';
                 }
             });
-            
+
             // Collapsible sections
             collapsibles.forEach(item => {
                 item.addEventListener('click', function() {
                     this.classList.toggle('active');
                     const content = this.nextElementSibling;
-                    
                     if (content.style.maxHeight) {
                         content.style.maxHeight = null;
                         this.querySelector('i').classList.replace('fa-chevron-up', 'fa-chevron-down');
@@ -1647,7 +1804,70 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     }
                 });
             });
-            
+
+            // Git Integration Functions
+            gitInitBtn.addEventListener('click', function() {
+                console.log('Initializing Git repository...');
+                // Simulate Git init
+                setTimeout(() => {
+                    currentBranch.textContent = 'main';
+                    gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>Initialized empty Git repository</span></div>';
+                    console.log('Git repository initialized successfully.');
+                }, 500);
+            });
+
+            gitStatusBtn.addEventListener('click', function() {
+                console.log('Checking Git status...');
+                // Simulate Git status
+                const statusItems = [
+                    { status: 'modified', file: 'index.html' },
+                    { status: 'untracked', file: 'style.css' },
+                    { status: 'added', file: 'script.js' }
+                ];
+                
+                gitStatus.innerHTML = '';
+                statusItems.forEach(item => {
+                    const statusItem = document.createElement('div');
+                    statusItem.classList.add('git-status-item');
+                    statusItem.innerHTML = `<span class="git-icon-${item.status}"></span><span>${item.file} (${item.status})</span>`;
+                    gitStatus.appendChild(statusItem);
+                });
+                
+                console.log('Git status retrieved successfully.');
+            });
+
+            gitCommitBtn.addEventListener('click', function() {
+                const message = gitCommitMessage.value.trim();
+                if (!message) {
+                    console.error('Please enter a commit message.');
+                    return;
+                }
+                
+                console.log(`Committing changes with message: "${message}"`);
+                // Simulate Git commit
+                setTimeout(() => {
+                    gitStatus.innerHTML = '<div class="git-status-item"><span class="git-icon-untracked"></span><span>No changes to commit</span></div>';
+                    gitCommitMessage.value = '';
+                    console.log('Changes committed successfully.');
+                }, 500);
+            });
+
+            gitPushBtn.addEventListener('click', function() {
+                console.log('Pushing to remote repository...');
+                // Simulate Git push
+                setTimeout(() => {
+                    console.log('Changes pushed to remote repository successfully.');
+                }, 1000);
+            });
+
+            gitPullBtn.addEventListener('click', function() {
+                console.log('Pulling from remote repository...');
+                // Simulate Git pull
+                setTimeout(() => {
+                    console.log('Changes pulled from remote repository successfully.');
+                }, 1000);
+            });
+
             // Load saved code from localStorage
             if (localStorage.getItem('supremeamer_html')) {
                 htmlCode.value = localStorage.getItem('supremeamer_html');
@@ -1655,10 +1875,10 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                 jsCode.value = localStorage.getItem('supremeamer_js');
                 console.log('Previously saved code loaded!');
             }
-            
+
             // Run code on initial load
             runCode();
-            
+
             // Add event listeners for Ctrl+S and Ctrl+Enter to run code
             document.addEventListener('keydown', function(e) {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -1671,7 +1891,7 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     runCode();
                 }
             });
-            
+
             // Handle mobile view
             function handleMobileView() {
                 if (window.innerWidth < 768) {
@@ -1681,13 +1901,14 @@ console.log('Sample calculation: 5 + 3 =', calculate(5, 3));`;
                     });
                 }
             }
-            
+
             // Initial call
             handleMobileView();
-            
+
             // Listen for resize events
             window.addEventListener('resize', handleMobileView);
         });
     </script>
 </body>
 </html>
+3
